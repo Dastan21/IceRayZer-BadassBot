@@ -1,6 +1,6 @@
 import { joinVoiceChannel } from '@discordjs/voice'
 import { GuildMember } from 'discord.js'
-import { beforeLeave } from './events.js'
+import { features } from './utils/feature.js'
 import * as console from './utils/logger.js'
 import voice from './utils/voice.js'
 
@@ -48,7 +48,7 @@ async function leave (interaction, connection) {
 
   await interaction.deferReply({ ephemeral: true })
   try {
-    await Promise.allSettled(beforeLeave.map(f => f?.()))
+    await Promise.allSettled(Object.values(features).map(f => f.beforeLeave()))
     voice.disconnect()
     interaction.editReply('Badass est parti du salon vocal.')
   } catch (err) {

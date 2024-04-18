@@ -129,5 +129,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-/audios/
-/data.json
+/bot/audios/
+/bot/bot.json
+/bot/src/features/**/data.json

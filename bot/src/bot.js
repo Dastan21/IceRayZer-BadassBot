@@ -1,14 +1,10 @@
 import { getVoiceConnection } from '@discordjs/voice'
 import { Client, GatewayIntentBits } from 'discord.js'
-import { readdir, stat } from 'node:fs/promises'
-import path from 'node:path'
 import { interactionHandlers } from './interactions.js'
-import db from './utils/db.js'
+import { loadFeatures } from './utils/feature.js'
 import voice from './utils/voice.js'
 
-const FEATURES_PATH = './features'
-
-const client = new Client({
+export const client = new Client({
   intents: [
     GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.GuildMessages,
@@ -21,7 +17,7 @@ client.on('ready', () => {
   console.info(`${client.user?.tag} connecté !`)
   client.user?.setPresence({ status: 'invisible' })
 
-  initFeatures()
+  loadFeatures(client)
 })
 
 client.on('interactionCreate', async (interaction) => {
@@ -40,31 +36,12 @@ client.on('interactionCreate', async (interaction) => {
 })
 
 client.on('voiceStateUpdate', (_oldState, newState) => {
-  if (voice == null) return
+  if (newState.channel == null) return
   if (voice.channel !== newState.channelId) voice.speakers.delete(newState.member.user.id)
   if (newState.channel?.members.filter((m) => !m.user.bot).size > 0) return
 
   voice.connection = getVoiceConnection(newState.guild.id)
-  voice.leave()
+  voice.disconnect()
 })
 
 client.login(process.env.TOKEN)
-
-async function initFeatures () {
-  const featSrcDirPath = path.join('src', FEATURES_PATH)
-  const dirs = await readdir(featSrcDirPath)
-  db.read()
-  for (const featDir of dirs) {
-    if (db.data.features[featDir]?.disabled === false) continue
-
-    const featPath = `${FEATURES_PATH}/${featDir}/${featDir}.js`
-    const featStat = await stat(path.join('src', featPath)).catch(() => {})
-    if (featStat == null || !featStat.isFile()) continue
-
-    import(featPath).then((module) => {
-      module.default(client)
-    }).catch((err) => {
-      console.warn(`Failed to load: ${featStat}:`, err)
-    })
-  }
-}

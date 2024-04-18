@@ -1,0 +1,48 @@
+html {
+  font-family: system-ui;
+  font-size: 20px;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  margin: 32px;
+}
+
+.features {
+  display: flex;
+  gap: 32px;
+  padding: 32px;
+}
+
+.features-title {
+  margin: 0;
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+  
+  padding: 16px;
+  margin: 16px;
+  border-radius: 4px;
+  border: 1px solid lightgray;
+}
+
+.feature .feature-title {
+  margin: 0;
+}
+
+.feature .feature-toggle {
+  user-select: none;
+}
+
+.feature .feature-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 16px;
+}
