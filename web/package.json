@@ -2,8 +2,7 @@
   "name": "badass-web",
   "type": "module",
   "scripts": {
-    "start": "node --env-file .env src/app.js",
-    "dev": "node --env-file .env --watch src/app.js"
+    "start": "node --env-file ../bot/.env src/app.js"
   },
   "dependencies": {
     "@koa/bodyparser": "^5.1.1",
