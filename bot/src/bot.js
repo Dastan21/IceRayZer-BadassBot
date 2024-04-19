@@ -35,10 +35,10 @@ client.on('interactionCreate', async (interaction) => {
   }
 })
 
-client.on('voiceStateUpdate', (_oldState, newState) => {
-  if (newState.channel == null) return
-  if (voice.channel !== newState.channelId) voice.speakers.delete(newState.member.user.id)
-  if (newState.channel?.members.filter((m) => !m.user.bot).size > 0) return
+client.on('voiceStateUpdate', (olSdtate, newState) => {
+  if (olSdtate.channel == null || olSdtate.member.user.id === client.user.id) return
+  if (voice.channelId !== newState.channelId) voice.speakers.delete(newState.member.user.id)
+  if (olSdtate.channel.members.filter((m) => !m.user.bot).size > 0) return
 
   voice.connection = getVoiceConnection(newState.guild.id)
   voice.disconnect()
