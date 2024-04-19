@@ -50,6 +50,8 @@ export async function loadFeatures () {
 }
 
 export async function loadFeature (feat) {
+  if (features[feat] != null) return
+
   const featPath = path.join(FEATURES_PATH, feat, `${feat}.js`)
   const featStat = await stat(featPath).catch(() => {})
   if (featStat == null || !featStat.isFile()) throw new Error(`File '${featPath}' not found`)
@@ -67,6 +69,8 @@ export async function loadFeature (feat) {
 }
 
 export function unloadFeature (feat) {
+  if (features[feat] == null) return
+
   const featModule = features[feat]
   featModule.unload(client)
 
