@@ -32,6 +32,10 @@ main {
   border-radius: 4px;
   border: 1px solid lightgray;
 }
+.feature .feature-header {
+  display: flex;
+  justify-content: space-between;
+}
 
 .feature .feature-title {
   margin: 0;

@@ -1,5 +1,5 @@
 import Router from '@koa/router'
-import { getFeature, getFeatures, saveFeature } from '../../controllers/features.js'
+import { getFeature, getFeatures, toggleFeature } from '../../controllers/features.js'
 
 const router = new Router({
   prefix: '/features'
@@ -16,8 +16,8 @@ router.get('/:feat', async ctx => {
   }
 })
 
-router.post('/:feat/save', async ctx => {
-  await saveFeature(ctx.params.feat, ctx.request.body).catch((err) => {
+router.post('/:feat/toggle', async ctx => {
+  await toggleFeature(ctx.params.feat, ctx.request.body.toggle).catch((err) => {
     ctx.state.error = err
   })
   ctx.redirect('/features')

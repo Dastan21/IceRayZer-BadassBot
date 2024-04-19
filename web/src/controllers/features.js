@@ -32,7 +32,3 @@ export async function toggleFeature (feature, value) {
     unloadFeature(feature)
   }
 }
-
-export async function saveFeature (feature, data) {
-  await toggleFeature(feature, data.enabled === 'on')
-}

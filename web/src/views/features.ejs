@@ -3,22 +3,13 @@
   <div class="features">
     <% features.forEach(feature => { %>
       <form action="features/<%= feature.id %>/save" method="post" class="feature">
-        <h3 class="feature-title"><%= feature.name %></h3>
-        <p><%= feature.description %></p>
-        <label class="feature-toggle">
-          <span>Activé</span>
-          <input
-            type="checkbox"
-            name="enabled"
-            <% if (feature.enabled) { %>
-              checked
-            <% } %>
-          >
-        </label>
-        <div class="feature-actions">
-          <input type="reset" value="Annuler">
-          <input type="submit" value="Enregistrer">
+        <div class="feature-header">
+          <h3 class="feature-title"><%= feature.name %></h3>
+          <button type="button" onclick="toggleFeature('<%= feature.id %>', '<%= !feature.enabled %>')">
+            <%= feature.enabled ? 'Désactiver' : 'Activer' %>
+          </button>
         </div>
+        <p><%= feature.description %></p>
       </form>
     <% }) %>
   </div>
