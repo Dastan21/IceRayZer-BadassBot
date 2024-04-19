@@ -130,5 +130,5 @@ dist
 .pnp.*
 
 /bot/audios/
-/bot/bot.json
+/bot/src/bot.json
 /bot/src/features/**/data.json
