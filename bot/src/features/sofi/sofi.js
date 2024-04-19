@@ -1,6 +1,7 @@
 import { randomInt } from 'node:crypto'
 import { readdir } from 'node:fs/promises'
 import path from 'node:path'
+import { client } from '../../bot.js'
 import Feature from '../../utils/feature.js'
 import voice from '../../utils/voice.js'
 
@@ -26,9 +27,11 @@ export default class Sofi extends Feature {
   async processSofi (msg) {
     if (msg.channelId !== '1205893733569138799' || msg.author?.id !== '742070928111960155') return
     if (msg.mentions.users.size !== 1) return
+    if (voice.channelId == null) return
 
     const userId = msg.mentions.users.first().id
-    if (!voice.speakers.has(userId)) return
+    const channel = await client.channels.fetch(voice.channelId)
+    if (channel.members.find(m => m.user.id === userId) == null) return
 
     const key = this.getSofiKey(msg.content)
     if (key == null) return

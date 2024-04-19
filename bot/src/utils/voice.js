@@ -4,7 +4,7 @@ import { features } from './feature.js'
 const VOICE_CONNECTION_TIMEOUT = 1000
 
 class Voice {
-  channel = null
+  channelId = null
   player = createAudioPlayer()
   speakers = new Map()
   playing = false

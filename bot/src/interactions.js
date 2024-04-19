@@ -23,7 +23,7 @@ async function join (interaction, connection) {
       selfMute: false,
       adapterCreator: channel.guild.voiceAdapterCreator
     })
-    voice.channel = channel.id
+    voice.channelId = channel.id
   } else {
     await interaction.reply({ content: 'Vous devez d\'abord être dans un salon vocal.', ephemeral: true })
     return
