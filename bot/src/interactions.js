@@ -1,8 +1,12 @@
 import { joinVoiceChannel } from '@discordjs/voice'
 import { GuildMember } from 'discord.js'
-import { features } from './utils/feature.js'
+import path from 'node:path'
 import * as console from './utils/logger.js'
 import voice from './utils/voice.js'
+
+const AUDIOS_PATH = path.join(import.meta.dirname, '../../audios')
+const AUDIO_LEAVE = 'leave.mp3'
+const AUDIO_LEAVE_DURATION = 6000
 
 async function join (interaction, connection) {
   let channel = null
@@ -48,8 +52,10 @@ async function leave (interaction, connection) {
 
   await interaction.deferReply({ ephemeral: true })
   try {
-    await Promise.allSettled(Object.values(features).map(f => f.beforeLeave()))
-    voice.disconnect()
+    voice.play(path.join(AUDIOS_PATH, AUDIO_LEAVE))
+    setTimeout(() => {
+      voice.disconnect()
+    }, AUDIO_LEAVE_DURATION)
     interaction.editReply('Badass est parti du salon vocal.')
   } catch (err) {
     console.error(err)

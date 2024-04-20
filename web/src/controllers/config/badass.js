@@ -1,0 +1,53 @@
+import { readFile, unlink, writeFile } from 'node:fs/promises'
+import path from 'node:path'
+import { getFeatureData, setFeatureData } from '../features.js'
+
+const AUDIOS_PATH = path.join(import.meta.dirname, '../../../../bot/audios')
+const AUDIO_MAX_SIZE = 1000000
+
+export async function saveConfig (req) {
+  if (isNaN(req.body.badass_freq) || req.body.badass_freq === '') throw new Error('badass_freq doit être un nombre')
+  if (Number(req.body.badass_freq) <= 0 || Number(req.body['freq-']) > 1) throw new Error('badass_freq doit être compris entre 0 exclu et 1')
+  const othersFreq = Object.keys(req.body).filter(k => k.startsWith('freq-') && k !== 'freq-').map(k => ({ name: k.replace('freq-', ''), freq: Number(req.body[k]) })).filter(Boolean)
+
+  if (req.file != null || req.body['freq-'] !== '') {
+    if (req.file == null) throw new Error('fichier audio manquant')
+    if (!req.file.mimetype.startsWith('audio')) throw new Error('format audio invalide')
+    const otherFreqName = req.file.originalname.match(/(.+?)(\.[^.]*$|$)/)[1]?.toLowerCase().replace(/ /g, '_').replace(/'|"/g, '')
+    if (!otherFreqName) throw new Error('nom de fichier audio invalide')
+    if (req.file.size > AUDIO_MAX_SIZE) throw new Error('fichier audio trop lourd')
+    if (isNaN(req.body['freq-']) || req.body['freq-'] === '') throw new Error('others_freq doit être un nombre')
+    if (Number(req.body['freq-']) <= 0 || Number(req.body['freq-']) > 1) throw new Error('others_freq doit être compris entre 0 exclu et 1')
+    othersFreq.push({ name: otherFreqName, freq: Number(req.body['freq-']) })
+    await saveAudio(otherFreqName, req.file.buffer)
+  }
+
+  const data = {
+    badass_freq: req.body.badass_freq,
+    others_freq: othersFreq
+  }
+
+  const prevData = await getFeatureData('badass')
+  await Promise.allSettled(prevData.others_freq.filter(o => !othersFreq.find(f => o.name === f.name)).map(o => unlink(path.join(AUDIOS_PATH, `${o.name}.mp3`))))
+
+  await setFeatureData('badass', data)
+}
+
+export async function loadConfig (data) {
+  return {
+    badass_freq: data.badass_freq,
+    others_freq: await Promise.all(data.others_freq.map(async o => ({
+      name: o.name,
+      href: Buffer.from(await loadAudio(o.name)).toString('base64'),
+      freq: o.freq
+    })))
+  }
+}
+
+async function loadAudio (name) {
+  return readFile(path.join(AUDIOS_PATH, `${name}.mp3`))
+}
+
+async function saveAudio (name, data) {
+  return writeFile(path.join(AUDIOS_PATH, `${name}.mp3`), data)
+}

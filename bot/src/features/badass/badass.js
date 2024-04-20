@@ -7,10 +7,7 @@ const ERROR_MARGIN = 40
 
 const AUDIOS_PATH = path.join(import.meta.dirname, '../../../audios')
 const AUDIO_BADASS = 'badass'
-const AUDIO_LEAVE = 'leave'
-
 const AUDIO_DURATION = 5000
-const AUDIO_LEAVE_DURATION = 6000
 
 export default class Badass extends Feature {
   ready = true
@@ -18,7 +15,7 @@ export default class Badass extends Feature {
   constructor () {
     super({
       badass_percent: 0.1,
-      audio_percents: {}
+      audio_weights: []
     })
   }
 
@@ -63,16 +60,15 @@ export default class Badass extends Feature {
     if (Array.from(voice.speakers.values()).map(s => s.value).some((s) => !!s)) return
 
     let rand = Math.random()
-    if (rand > this.data.badass_percent) return
+    if (rand > this.data.badass_freq) return
 
     let audio = AUDIO_BADASS
     // Pick audio file randomly (by weight)
     rand = Math.random()
-    const audioPercents = this.data.audio_percents
-    const audioKeys = Object.entries(audioPercents).sort((a, b) => a[1] - b[1]).map(([k]) => k)
-    for (const key of audioKeys) {
-      if (rand < audioPercents[key]) {
-        audio = key
+    const audioWeights = this.data.others_freq.sort((a, b) => a.weight - b.weight)
+    for (const aw of audioWeights) {
+      if (rand < aw.weight) {
+        audio = aw.name
         break
       }
     }
@@ -80,13 +76,6 @@ export default class Badass extends Feature {
     voice.play(this.getAudioPath(audio))
     this.ready = false
     setTimeout(() => { this.ready = true }, AUDIO_DURATION)
-  }
-
-  async beforeLeave () {
-    return await new Promise((resolve) => {
-      voice.play(this.getAudioPath(AUDIO_LEAVE))
-      setTimeout(resolve, AUDIO_LEAVE_DURATION)
-    })
   }
 
   getAudioPath (audio) {

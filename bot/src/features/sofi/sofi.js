@@ -6,12 +6,11 @@ import Feature from '../../utils/feature.js'
 import voice from '../../utils/voice.js'
 
 const SOFI_AUDIOS_PATH = path.join(import.meta.dirname, '../../../audios/sofi')
+const SOFI_KEYS = ['drop', 'grab']
 
 export default class Sofi extends Feature {
   constructor () {
-    super({
-      sofi_keys: ['drop', 'grab']
-    })
+    super({})
 
     this.processSofi = this.processSofi.bind(this)
   }
@@ -45,7 +44,7 @@ export default class Sofi extends Feature {
   }
 
   getSofiKey (content) {
-    for (const key of this.data.sofi_keys) {
+    for (const key of SOFI_KEYS) {
       if (content.toLowerCase().includes(key)) return key
     }
     return null

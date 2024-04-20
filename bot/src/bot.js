@@ -13,35 +13,37 @@ export const client = new Client({
   ]
 })
 
-client.on('ready', () => {
-  console.info(`${client.user?.tag} connecté !`)
-  client.user?.setPresence({ status: 'invisible' })
+if (process.env.NODE_ENV !== 'development') {
+  client.on('ready', () => {
+    console.info(`${client.user?.tag} connecté !`)
+    client.user?.setPresence({ status: 'invisible' })
 
-  loadFeatures(client)
-})
+    loadFeatures(client)
+  })
 
-client.on('interactionCreate', async (interaction) => {
-  if (!interaction.isCommand() || !interaction.guildId) return
+  client.on('interactionCreate', async (interaction) => {
+    if (!interaction.isCommand() || !interaction.guildId) return
 
-  const handler = interactionHandlers.get(interaction.commandName)
-  try {
-    if (handler) {
-      await handler(interaction, getVoiceConnection(interaction.guildId))
-    } else {
-      await interaction.reply('Commande inconnue.')
+    const handler = interactionHandlers.get(interaction.commandName)
+    try {
+      if (handler) {
+        await handler(interaction, getVoiceConnection(interaction.guildId))
+      } else {
+        await interaction.reply('Commande inconnue.')
+      }
+    } catch (err) {
+      console.error(err)
     }
-  } catch (err) {
-    console.error(err)
-  }
-})
+  })
 
-client.on('voiceStateUpdate', (olSdtate, newState) => {
-  if (olSdtate.channel == null || olSdtate.member.user.id === client.user.id) return
-  if (voice.channelId !== newState.channelId) voice.speakers.delete(newState.member.user.id)
-  if (olSdtate.channel.members.filter((m) => !m.user.bot).size > 0) return
+  client.on('voiceStateUpdate', (olSdtate, newState) => {
+    if (olSdtate.channel == null || olSdtate.member.user.id === client.user.id) return
+    if (voice.channelId !== newState.channelId) voice.speakers.delete(newState.member.user.id)
+    if (olSdtate.channel.members.filter((m) => !m.user.bot).size > 0) return
 
-  voice.connection = getVoiceConnection(newState.guild.id)
-  voice.disconnect()
-})
+    voice.connection = getVoiceConnection(newState.guild.id)
+    voice.disconnect()
+  })
 
-client.login(process.env.TOKEN)
+  client.login(process.env.TOKEN)
+}

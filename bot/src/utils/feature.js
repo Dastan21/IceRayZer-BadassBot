@@ -15,6 +15,7 @@ export default class Feature {
 
   constructor (defaultData) {
     this.#data = new LowSync(new JSONFileSync(path.join(FEATURES_PATH, this.id, 'data.json')), defaultData)
+    this.#data.write()
   }
 
   get data () {

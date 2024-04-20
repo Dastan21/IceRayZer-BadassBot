@@ -2,15 +2,23 @@
   "name": "badass-web",
   "type": "module",
   "scripts": {
-    "start": "node --env-file ../bot/.env src/app.js"
+    "start": "node --env-file ../bot/.env src/app.js",
+    "dev": "nodemon --env-file ../bot/.env src/app.js"
   },
   "dependencies": {
     "@koa/bodyparser": "^5.1.1",
     "@koa/ejs": "^5.1.0",
+    "@koa/multer": "^3.0.2",
     "@koa/router": "^12.0.1",
     "koa": "^2.15.3",
     "koa-bodyparser": "^4.4.1",
+    "koa-passport": "^6.0.0",
+    "koa-session": "^6.4.0",
     "koa-static": "^5.0.0",
-    "lowdb": "^7.0.1"
+    "lowdb": "^7.0.1",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

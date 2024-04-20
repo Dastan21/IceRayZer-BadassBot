@@ -1,6 +1,5 @@
-html {
+* {
   font-family: system-ui;
-  font-size: 20px;
 }
 
 body {
@@ -22,19 +21,25 @@ main {
 }
 
 .feature {
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
-  
-  padding: 16px;
   margin: 16px;
-  border-radius: 4px;
-  border: 1px solid lightgray;
 }
+
 .feature .feature-header {
   display: flex;
   justify-content: space-between;
+}
+
+.feature .feature-header .feature-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feature .feature-header .feature-header-title .feature-enabled-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .feature .feature-title {
@@ -45,8 +50,134 @@ main {
   user-select: none;
 }
 
-.feature .feature-actions {
+.feature .feature-configs {
   display: flex;
-  gap: 8px;
-  padding-top: 16px;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.feature .feature-configs > input {
+  width: fit-content;
+  margin: 0 0 0 auto;
+}
+
+button,
+input {
+  color: #111;
+  padding: 6px 12px;
+  border: 1px solid dimgray;
+  border-radius: 3px;
+  background-color: unset;
+  outline: none;
+}
+
+button:hover {
+  background-color: #ddd;
+}
+
+button:active {
+  background-color: #eee;
+}
+
+button,
+input[type="file"] {
+  cursor: pointer;
+}
+
+button[type="submit"] {
+  width: fit-content;
+  margin: 16px 0 0 auto;
+  color: black;
+  background-color: white;
+}
+
+input[type="file"] {
+  padding: 6px;
+}
+
+.login {
+  margin-top: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login .login-form {
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login .login-title {
+  margin: 0 auto 32px auto;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  height: fit-content;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.05);
+  padding: 32px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.input > input,
+.input-group > input {
+  width: 100%;
+}
+
+.input > span,
+.input-group > span {
+  white-space: nowrap;
+}
+
+.alert {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  padding: 16px;
+  color: white;
+}
+
+.alert.success {
+  background-color: #20b75b;
+  border-color: #009138;
+}
+
+.alert.error {
+  background-color: #ff6657;
+  border-color: #ff1900;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.button-icon {
+  display: flex;
+  margin: 0 !important;
+  padding: 0;
+  border: none;
+  background: none;
 }

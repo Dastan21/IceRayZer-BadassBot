@@ -30,6 +30,8 @@ class Voice {
   }
 
   play (audio, volume = 0.1) {
+    if (audio == null) return
+
     const resource = createAudioResource(audio ?? '', { inlineVolume: true })
     resource.volume?.setVolume(volume)
     this.player.play(resource)
