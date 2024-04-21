@@ -1,25 +1,32 @@
 <label class="input">
   <span>Fréquence d'apparition du son "badass" pendant un silence :</span>
-  <input type="number" name="badass_freq" value="<%= feature.data.badass_freq %>" min="0" max="1" step="any">
+  <input
+    type="number"
+    name="badass_freq"
+    value="<%= feature.data.badass_freq %>"
+    min="0"
+    max="1"
+    step="any"
+    placeholder="Fréquence"
+  >
 </label>
 <div class="input-group">
-  <span>Sons additionnels à jouer pendant un silence :</span>
+  <span>Sons additionnels à jouer pendant un silence</span>
   <div class="input-group">
-    <% for (let i = 0; i < feature.data.others_freq.length + 1; i++) { %>
+    <% for (let i = -1; i < feature.data.others_freq.length; i++) { %>
       <div class="input">
         <label class="input">
-          <span>Son :</span>
-          <% if (feature.data.others_freq[i] != null) { %>
+          <% if (feature.data.others_freq[i] == null) { %>
+            <span>Ajouter un son</span>
+            <input type="file" name="audio" accept="audio/mp3">
+          <% } else { %>
             <span><%= feature.data.others_freq[i].name %></span>
             <audio controls autobuffer>
               <source src="data:audio/mp3;base64,<%= feature.data.others_freq[i].href %>">
             </audio>
-          <% } else { %>
-            <input type="file" name="audio" accept="audio/mp3">
           <% } %>
         </label>
         <label class="input">
-          <span>Fréquence :</span>
           <input
             type="number"
             name="freq-<%= feature.data.others_freq[i]?.name %>"
@@ -27,10 +34,11 @@
             min="0"
             max="1"
             step="any"
+            placeholder="Fréquence"
           >
         </label>
         <% if (feature.data.others_freq[i] != null) { %>
-          <button type="button" onclick="this.parentElement.remove()">Supprimer</button>
+          <button type="button" data-delete-input>Supprimer</button>
         <% } %>
       </div>
     <% } %>

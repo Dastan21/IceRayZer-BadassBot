@@ -67,12 +67,14 @@ main {
 
 button,
 input {
+  width: fit-content;
   color: #111;
   padding: 6px 12px;
   border: 1px solid dimgray;
   border-radius: 3px;
   background-color: unset;
   outline: none;
+  box-sizing: border-box;
 }
 
 button:hover {
@@ -95,10 +97,6 @@ button[type="submit"] {
   background-color: white;
 }
 
-input[type="file"] {
-  padding: 6px;
-}
-
 .login {
   margin-top: 64px;
   display: flex;
@@ -107,6 +105,7 @@ input[type="file"] {
 }
 
 .login .login-form {
+  min-width: 256px;
   height: fit-content;
   display: flex;
   flex-direction: column;
@@ -135,21 +134,35 @@ input[type="file"] {
 }
 
 .input {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 16px;
+  background-color: whitesmoke;
+  padding: 6px;
+  border-radius: 4px;
 }
 
 .input > input,
 .input-group > input {
   width: 100%;
+  background-color: white;
 }
 
 .input > span,
 .input-group > span {
   white-space: nowrap;
+}
+
+.input-group > span {
+  font-weight: bold;
+}
+
+.input-group > .input {
+  justify-content: space-between;
+}
+
+.input > .input {
+  padding: 0;
 }
 
 .alert {
@@ -180,4 +193,13 @@ input[type="file"] {
   padding: 0;
   border: none;
   background: none;
+}
+
+audio {
+  height: 24px;
+}
+
+input[type="file"] {
+  padding: 6px;
+  width: fit-content;
 }

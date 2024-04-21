@@ -6,7 +6,7 @@ import Feature from '../../utils/feature.js'
 import voice from '../../utils/voice.js'
 
 const SOFI_AUDIOS_PATH = path.join(import.meta.dirname, '../../../audios/sofi')
-const SOFI_KEYS = ['drop', 'grab']
+export const SOFI_KEYS = ['drop', 'grab']
 
 export default class Sofi extends Feature {
   constructor () {

@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "start": "node --env-file ../bot/.env src/app.js",
-    "dev": "nodemon --env-file ../bot/.env src/app.js"
+    "dev": "set WEB_ONLY=true&& nodemon --env-file ../bot/.env src/app.js"
   },
   "dependencies": {
     "@koa/bodyparser": "^5.1.1",

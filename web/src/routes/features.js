@@ -28,7 +28,7 @@ router.post('/:feat/toggle', async ctx => {
   ctx.redirect('/features')
 })
 
-router.post('/:feat/config', upload.single('audio'), async ctx => {
+router.post('/:feat/config', upload.any(), async ctx => {
   await updateFeatureConfig(ctx.params.feat, ctx.request).then(() => {
     ctx.session.alert = { success: true, message: 'Configurations sauvegardées !' }
   }).catch((err) => {

@@ -10,20 +10,22 @@ export async function saveConfig (req) {
   if (Number(req.body.badass_freq) <= 0 || Number(req.body['freq-']) > 1) throw new Error('badass_freq doit être compris entre 0 exclu et 1')
   const othersFreq = Object.keys(req.body).filter(k => k.startsWith('freq-') && k !== 'freq-').map(k => ({ name: k.replace('freq-', ''), freq: Number(req.body[k]) })).filter(Boolean)
 
-  if (req.file != null || req.body['freq-'] !== '') {
-    if (req.file == null) throw new Error('fichier audio manquant')
-    if (!req.file.mimetype.startsWith('audio')) throw new Error('format audio invalide')
-    const otherFreqName = req.file.originalname.match(/(.+?)(\.[^.]*$|$)/)[1]?.toLowerCase().replace(/ /g, '_').replace(/'|"/g, '')
+  const file = req.files.find(f => f.fieldname === 'audio')
+  if (file != null || req.body['freq-'] !== '') {
+    if (file == null) throw new Error('fichier audio manquant')
+    if (!file.mimetype.startsWith('audio')) throw new Error('format audio invalide')
+    const otherFreqName = file.originalname.match(/(.+?)(\.[^.]*$|$)/)[1]?.toLowerCase().replace(/ /g, '_').replace(/'|"/g, '').trim()
     if (!otherFreqName) throw new Error('nom de fichier audio invalide')
-    if (req.file.size > AUDIO_MAX_SIZE) throw new Error('fichier audio trop lourd')
-    if (isNaN(req.body['freq-']) || req.body['freq-'] === '') throw new Error('others_freq doit être un nombre')
+    if (file.size > AUDIO_MAX_SIZE) throw new Error('fichier audio trop lourd')
+    if (req.body['freq-'] === '') throw new Error('others_freq est requis')
+    if (isNaN(req.body['freq-'])) throw new Error('others_freq doit être un nombre')
     if (Number(req.body['freq-']) <= 0 || Number(req.body['freq-']) > 1) throw new Error('others_freq doit être compris entre 0 exclu et 1')
     othersFreq.push({ name: otherFreqName, freq: Number(req.body['freq-']) })
-    await saveAudio(otherFreqName, req.file.buffer)
+    await saveAudio(otherFreqName, file.buffer)
   }
 
   const data = {
-    badass_freq: req.body.badass_freq,
+    badass_freq: Number(req.body.badass_freq),
     others_freq: othersFreq
   }
 
