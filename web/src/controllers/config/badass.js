@@ -1,6 +1,7 @@
 import { readFile, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { getFeatureData, setFeatureData } from '../features.js'
+import { getAudioFileName } from './common.js'
 
 const AUDIOS_PATH = path.join(import.meta.dirname, '../../../../bot/audios')
 const AUDIO_MAX_SIZE = 1000000
@@ -8,13 +9,13 @@ const AUDIO_MAX_SIZE = 1000000
 export async function saveConfig (req) {
   if (isNaN(req.body.badass_freq) || req.body.badass_freq === '') throw new Error('badass_freq doit être un nombre')
   if (Number(req.body.badass_freq) <= 0 || Number(req.body['freq-']) > 1) throw new Error('badass_freq doit être compris entre 0 exclu et 1')
-  const othersFreq = Object.keys(req.body).filter(k => k.startsWith('freq-') && k !== 'freq-').map(k => ({ name: k.replace('freq-', ''), freq: Number(req.body[k]) })).filter(Boolean)
+  const othersFreq = Object.keys(req.body).filter(k => k.startsWith('freq-') && k !== 'freq-').map(k => ({ name: getAudioFileName(k.replace('freq-', '')), freq: Number(req.body[k]) })).filter(Boolean)
 
   const file = req.files.find(f => f.fieldname === 'audio')
   if (file != null || req.body['freq-'] !== '') {
     if (file == null) throw new Error('fichier audio manquant')
     if (!file.mimetype.startsWith('audio')) throw new Error('format audio invalide')
-    const otherFreqName = getAudioFileName(file)
+    const otherFreqName = getAudioFileName(file.originalname)
     if (!otherFreqName) throw new Error('nom de fichier audio invalide')
     if (file.size > AUDIO_MAX_SIZE) throw new Error('fichier audio trop lourd')
     if (req.body['freq-'] === '') throw new Error('others_freq est requis')
@@ -33,10 +34,6 @@ export async function saveConfig (req) {
   await Promise.allSettled(prevData.others_freq.filter(o => !othersFreq.find(f => o.name === f.name)).map(o => unlink(path.join(AUDIOS_PATH, `${o.name}.mp3`))))
 
   await setFeatureData('badass', data)
-}
-
-function getAudioFileName (file) {
-  return file.originalname.match(/(.+?)(\.[^.]*$|$)/)[1]?.toLowerCase().replace(/ /g, '_').replace(/'|"/g, '').trim().normalize('NFD').replace(/\p{Diacritic}/gu, '')
 }
 
 export async function loadConfig (data) {

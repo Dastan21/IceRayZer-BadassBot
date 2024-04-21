@@ -1,6 +1,7 @@
 import { mkdir, readFile, readdir, rm, stat, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { SOFI_KEYS } from '../../../../bot/src/features/sofi/sofi.js'
+import { getAudioFileName } from './common.js'
 
 const SOFI_AUDIOS_PATH = path.join(import.meta.dirname, '../../../../bot/audios/sofi')
 const AUDIO_MAX_SIZE = 1000000
@@ -15,7 +16,7 @@ export async function saveConfig (req) {
     if (newUserAudios.length < 1) throw new Error('au moins un audio est requis')
     for (const file of newUserAudios) {
       if (config.sofi_audios[req.body.user_id] != null) throw new Error('ID déjà utilisé')
-      const otherFreqName = getAudioFileName(file)
+      const otherFreqName = getAudioFileName(file.originalname)
       if (!otherFreqName) throw new Error('nom de fichier audio invalide')
       if (file.size > AUDIO_MAX_SIZE) throw new Error('fichier audio trop lourd')
       await saveAudio(req.body.user_id, file.fieldname + '_' + otherFreqName, file.buffer)
@@ -24,7 +25,7 @@ export async function saveConfig (req) {
 
   const addedAudios = req.files.filter(f => !SOFI_KEYS.includes(f.fieldname) && new RegExp('\\d{18}\\/' + SOFI_KEYS.join('|')).test(f.fieldname))
   for (const file of addedAudios) {
-    const audioName = getAudioFileName(file)
+    const audioName = getAudioFileName(file.originalname)
     if (!audioName) throw new Error('nom de fichier audio invalide')
     const match = file.fieldname.match(/(\d{18})\/(\D+)/)
     const userId = match[1]
@@ -48,10 +49,6 @@ export async function saveConfig (req) {
   })
   await Promise.allSettled(audiosToDelete.map(unlink))
   await Promise.allSettled([...usersToDelete].map((u) => rm(u, { recursive: true, force: true })))
-}
-
-function getAudioFileName (file) {
-  return file.originalname.match(/(.+?)(\.[^.]*$|$)/)[1]?.toLowerCase().replace(/ /g, '_').replace(/'|"/g, '').trim().normalize('NFD').replace(/\p{Diacritic}/gu, '')
 }
 
 export async function loadConfig () {
