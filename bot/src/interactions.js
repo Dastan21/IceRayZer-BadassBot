@@ -4,7 +4,7 @@ import path from 'node:path'
 import * as console from './utils/logger.js'
 import voice from './utils/voice.js'
 
-const AUDIOS_PATH = path.join(import.meta.dirname, '../../audios')
+const AUDIOS_PATH = path.join(import.meta.dirname, '../audios')
 const AUDIO_LEAVE = 'leave.mp3'
 const AUDIO_LEAVE_DURATION = 6000
 
@@ -55,8 +55,8 @@ async function leave (interaction, connection) {
     voice.play(path.join(AUDIOS_PATH, AUDIO_LEAVE))
     setTimeout(() => {
       voice.disconnect()
+      interaction.editReply('Badass est parti du salon vocal.')
     }, AUDIO_LEAVE_DURATION)
-    interaction.editReply('Badass est parti du salon vocal.')
   } catch (err) {
     console.error(err)
   }
