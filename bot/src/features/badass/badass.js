@@ -14,8 +14,8 @@ export default class Badass extends Feature {
 
   constructor () {
     super({
-      badass_percent: 0.1,
-      audio_weights: []
+      badass_freq: 0.1,
+      others_freq: []
     })
   }
 
