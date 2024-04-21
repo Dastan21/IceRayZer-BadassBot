@@ -14,7 +14,7 @@ export async function saveConfig (req) {
   if (file != null || req.body['freq-'] !== '') {
     if (file == null) throw new Error('fichier audio manquant')
     if (!file.mimetype.startsWith('audio')) throw new Error('format audio invalide')
-    const otherFreqName = file.originalname.match(/(.+?)(\.[^.]*$|$)/)[1]?.toLowerCase().replace(/ /g, '_').replace(/'|"/g, '').trim()
+    const otherFreqName = getAudioFileName(file)
     if (!otherFreqName) throw new Error('nom de fichier audio invalide')
     if (file.size > AUDIO_MAX_SIZE) throw new Error('fichier audio trop lourd')
     if (req.body['freq-'] === '') throw new Error('others_freq est requis')
@@ -33,6 +33,10 @@ export async function saveConfig (req) {
   await Promise.allSettled(prevData.others_freq.filter(o => !othersFreq.find(f => o.name === f.name)).map(o => unlink(path.join(AUDIOS_PATH, `${o.name}.mp3`))))
 
   await setFeatureData('badass', data)
+}
+
+function getAudioFileName (file) {
+  return file.originalname.match(/(.+?)(\.[^.]*$|$)/)[1]?.toLowerCase().replace(/ /g, '_').replace(/'|"/g, '').trim().normalize('NFD').replace(/\p{Diacritic}/gu, '')
 }
 
 export async function loadConfig (data) {

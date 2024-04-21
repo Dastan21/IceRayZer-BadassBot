@@ -51,7 +51,7 @@ export async function saveConfig (req) {
 }
 
 function getAudioFileName (file) {
-  return file.originalname.match(/(.+?)(\.[^.]*$|$)/)[1]?.toLowerCase().replace(/ /g, '_').replace(/'|"/g, '').trim()
+  return file.originalname.match(/(.+?)(\.[^.]*$|$)/)[1]?.toLowerCase().replace(/ /g, '_').replace(/'|"/g, '').trim().normalize('NFD').replace(/\p{Diacritic}/gu, '')
 }
 
 export async function loadConfig () {
