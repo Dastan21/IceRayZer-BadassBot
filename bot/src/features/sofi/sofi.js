@@ -42,7 +42,7 @@ export default class Sofi extends Feature {
     const audio = audios.length > 1 ? audios[randomInt(0, audios.length)] : audios[0]
     if (audio == null) return
 
-    voice.play(path.join(SOFI_AUDIOS_PATH, userId, audio), this.data.sofi_audios[`${userId}/${sofiKey}/${audio}`])
+    voice.play(path.join(SOFI_AUDIOS_PATH, userId, audio), this.data.sofi_audios[`${userId}/${sofiKey}/${audio}`] / 2)
   }
 
   getSofiKey (content) {
