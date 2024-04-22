@@ -34,15 +34,15 @@ export default class Sofi extends Feature {
     const channel = await client.channels.fetch(voice.channelId)
     if (channel.members.find(m => m.user.id === userId) == null) return
 
-    const key = this.getSofiKey(msg.content)
-    if (key == null) return
+    const sofiKey = this.getSofiKey(msg.content)
+    if (sofiKey == null) return
 
     const files = await readdir(path.join(SOFI_AUDIOS_PATH, userId)).catch(() => {}) ?? []
-    const audios = files.filter(a => a.startsWith(key))
+    const audios = files.filter(a => a.startsWith(sofiKey))
     const audio = audios.length > 1 ? audios[randomInt(0, audios.length)] : audios[0]
     if (audio == null) return
 
-    voice.play(path.join(SOFI_AUDIOS_PATH, userId, audio), 1)
+    voice.play(path.join(SOFI_AUDIOS_PATH, userId, audio), this.data.sofi_audios[`${userId}/${sofiKey}/${audio}`])
   }
 
   getSofiKey (content) {
