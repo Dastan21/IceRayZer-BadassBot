@@ -79,7 +79,7 @@ export async function loadConfig (data) {
         return {
           name,
           href: Buffer.from(await loadAudio(userId, name)).toString('base64'),
-          volume: data.sofi_audios[`${userId}/${sofiKey}/${name}`] ?? 100
+          volume: (data.sofi_audios[`${userId}/${sofiKey}/${name}`] ?? 1) * 100
         }
       }))
     }

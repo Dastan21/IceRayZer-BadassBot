@@ -49,7 +49,7 @@ export async function loadConfig (data) {
       name: o.name,
       href: Buffer.from(await loadAudio(o.name)).toString('base64'),
       freq: o.freq,
-      volume: o.volume ?? 100
+      volume: (o.volume ?? 1) * 100
     })))
   }
 }
