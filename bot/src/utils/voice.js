@@ -29,11 +29,11 @@ class Voice {
     this.connection = null
   }
 
-  play (audio, volume = 0.1) {
+  play (audio, volume = 0.2) {
     if (audio == null) return
 
     const resource = createAudioResource(audio ?? '', { inlineVolume: true })
-    resource.volume?.setVolume(volume)
+    resource.volume?.setVolume(Math.min(volume, 1) / 2)
     this.player.play(resource)
   }
 }
