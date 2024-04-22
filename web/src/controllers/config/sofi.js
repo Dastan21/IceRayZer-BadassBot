@@ -53,7 +53,7 @@ export async function saveConfig (req) {
 
   const data = {
     sofi_audios: Object.keys(req.body).filter(k => k.startsWith('volume-')).reduce((t, a) => {
-      t[a.replace('volume-', '')] = Number(req.body[a])
+      t[a.replace('volume-', '')] = Number(req.body[a]) / 100
       return t
     }, {})
   }

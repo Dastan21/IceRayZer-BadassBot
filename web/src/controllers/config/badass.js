@@ -14,7 +14,7 @@ export async function saveConfig (req) {
     return {
       name: getAudioFileName(name),
       freq: Number(req.body[k]),
-      volume: Number(req.body[`volume-${name}`])
+      volume: Number(req.body[`volume-${name}`]) / 100
     }
   }).filter(Boolean)
 
