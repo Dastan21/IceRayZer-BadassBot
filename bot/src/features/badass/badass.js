@@ -73,7 +73,7 @@ export default class Badass extends Feature {
       }
     }
 
-    voice.play(this.getAudioPath(audio), this.data.others_freq[audio]?.volume)
+    voice.play(this.getAudioPath(audio), this.data.others_freq.find(o => o.name === audio)?.volume)
     this.ready = false
     setTimeout(() => { this.ready = true }, AUDIO_DURATION)
   }
