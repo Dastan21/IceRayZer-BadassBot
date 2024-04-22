@@ -203,3 +203,8 @@ input[type="file"] {
   padding: 6px;
   width: fit-content;
 }
+
+input[type="range"] {
+  max-width: 100px;
+  padding: 0;
+}

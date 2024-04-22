@@ -23,9 +23,17 @@
                 <input type="file" name="<%= userId %>/<%= sofiKey %>" accept="audio/mp3">
               <% } else { %>
                 <span><%= feature.data.sofi_audios[userId][sofiKey][i].name %></span>
-                <audio controls autobuffer>
+                <audio controls autobuffer data-volume-control>
                   <source src="data:audio/mp3;base64,<%= feature.data.sofi_audios[userId][sofiKey][i].href %>">
                 </audio>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="1"
+                  name="volume-<%= userId %>/<%= sofiKey %>/<%= feature.data.sofi_audios[userId][sofiKey][i].name %>"
+                  value="<%= feature.data.sofi_audios[userId][sofiKey][i].volume %>"
+                >
                 <input type="hidden" name="<%= userId %>/<%= sofiKey %>" value="<%= feature.data.sofi_audios[userId][sofiKey][i].name %>">
                 <button type="button" data-delete-input>Supprimer</button>
               <% } %>

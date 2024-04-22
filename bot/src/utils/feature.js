@@ -83,5 +83,6 @@ export function unloadFeature (feat) {
 }
 
 export function isFeatureEnabled (feat) {
+  db.read()
   return db.data.features[feat]
 }

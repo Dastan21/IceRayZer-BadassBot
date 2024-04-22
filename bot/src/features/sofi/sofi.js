@@ -10,7 +10,9 @@ export const SOFI_KEYS = ['drop', 'grab']
 
 export default class Sofi extends Feature {
   constructor () {
-    super({})
+    super({
+      sofi_audios: {}
+    })
 
     this.processSofi = this.processSofi.bind(this)
   }

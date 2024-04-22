@@ -37,7 +37,7 @@ export async function getFeatureMeta (feat) {
 }
 
 export async function getFeatureData (feat) {
-  const data = JSON.parse(await readFile(path.join(FEATURES_PATH, feat, 'data.json'), { encoding: 'utf-8' }).catch(() => {}))
+  const data = JSON.parse(await readFile(path.join(FEATURES_PATH, feat, 'data.json'), { encoding: 'utf-8' }).catch(() => '{}'))
   const featMod = await import(`./config/${feat}.js`)
   return await featMod.loadConfig(data)
 }

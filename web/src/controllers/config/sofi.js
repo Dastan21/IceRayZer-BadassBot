@@ -1,13 +1,14 @@
 import { mkdir, readFile, readdir, rm, stat, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { SOFI_KEYS } from '../../../../bot/src/features/sofi/sofi.js'
+import { getFeatureData, setFeatureData } from '../features.js'
 import { getAudioFileName } from './common.js'
 
 const SOFI_AUDIOS_PATH = path.join(import.meta.dirname, '../../../../bot/audios/sofi')
 const AUDIO_MAX_SIZE = 1000000
 
 export async function saveConfig (req) {
-  const config = await loadConfig()
+  const config = await loadConfig(getFeatureData('sofi'))
 
   const newUserAudios = req.files.filter(f => SOFI_KEYS.includes(f.fieldname))
   if (req.body.user_id !== '' || newUserAudios.length > 0) {
@@ -49,13 +50,24 @@ export async function saveConfig (req) {
   })
   await Promise.allSettled(audiosToDelete.map(unlink))
   await Promise.allSettled([...usersToDelete].map((u) => rm(u, { recursive: true, force: true })))
+
+  const data = {
+    sofi_audios: Object.keys(req.body).filter(k => k.startsWith('volume-')).reduce((t, a) => {
+      t[a.replace('volume-', '')] = Number(req.body[a])
+      return t
+    }, {})
+  }
+
+  await setFeatureData('sofi', data)
 }
 
-export async function loadConfig () {
+export async function loadConfig (data) {
   const config = {
     sofi_audios: {},
     sofi_keys: SOFI_KEYS
   }
+
+  if (data.sofi_audios == null) data.sofi_audios = {}
 
   const userIds = await readdir(SOFI_AUDIOS_PATH)
   for (const userId of userIds) {
@@ -66,7 +78,8 @@ export async function loadConfig () {
         const name = a.replace('.mp3', '')
         return {
           name,
-          href: Buffer.from(await loadAudio(userId, name)).toString('base64')
+          href: Buffer.from(await loadAudio(userId, name)).toString('base64'),
+          volume: data.sofi_audios[`${userId}/${sofiKey}/${name}`] ?? 100
         }
       }))
     }

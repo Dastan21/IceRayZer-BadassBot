@@ -21,9 +21,17 @@
             <input type="file" name="audio" accept="audio/mp3">
           <% } else { %>
             <span><%= feature.data.others_freq[i].name %></span>
-            <audio controls autobuffer>
+            <audio controls autobuffer data-volume-control>
               <source src="data:audio/mp3;base64,<%= feature.data.others_freq[i].href %>">
             </audio>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              name="volume-<%= feature.data.others_freq[i].name %>"
+              value="<%= feature.data.others_freq[i].volume %>"
+            >
           <% } %>
         </label>
         <label class="input">
