@@ -1,7 +1,6 @@
 import multer from '@koa/multer'
 import Router from '@koa/router'
-import { Readable } from 'node:stream'
-import voice from '../../../bot/src/utils/voice.js'
+import { playAudioYoutube as addAudioYoutube, getYTData, pauseAudioYoutube, playAudioFile, removeAudioYoutube, resumeAudioYoutube } from '../controllers/audios.js'
 
 const upload = multer({
   storage: multer.memoryStorage()
@@ -19,15 +18,64 @@ router.use((ctx, next) => {
   }
 })
 
-router.post('/play', upload.any(), async ctx => {
-  const file = ctx.files[0]
-  if (file == null) throw new Error('Audio requis')
-  voice.play(Readable.from(file.buffer))
+router.post('/file', upload.any(), async ctx => {
+  await playAudioFile(ctx.files?.[0]).then(() => {
+    ctx.session.alert = { success: true, message: 'Son joué !' }
+  }).catch((err) => {
+    ctx.session.alert = { success: false, message: err.message ?? err }
+    console.error(err)
+  })
+  
+  ctx.redirect('/audios')
+})
+
+router.post('/youtube/add', async ctx => {
+  await addAudioYoutube(ctx.request.body.yt).then(() => {
+    ctx.session.alert = { success: true, message: 'Son Youtube mis en pause !' }
+  }).catch((err) => {
+    ctx.session.alert = { success: false, message: err.message ?? err }
+    console.error(err)
+  })
+  
+  ctx.redirect('/audios')
+})
+
+router.post('/youtube/pause', async ctx => {
+  await pauseAudioYoutube().then(() => {
+    ctx.session.alert = { success: true, message: 'Son Youtube mis en pause !' }
+  }).catch((err) => {
+    ctx.session.alert = { success: false, message: err.message ?? err }
+    console.error(err)
+  })
+  
+  ctx.redirect('/audios')
+})
+
+router.post('/youtube/resume', async ctx => {
+  await resumeAudioYoutube().then(() => {
+    ctx.session.alert = { success: true, message: 'Son Youtube en cours de lecture !' }
+  }).catch((err) => {
+    ctx.session.alert = { success: false, message: err.message ?? err }
+    console.error(err)
+  })
+  
+  ctx.redirect('/audios')
+})
+
+router.post('/youtube/:id/remove', async ctx => {
+  await removeAudioYoutube(ctx.params.id).then(() => {
+    ctx.session.alert = { success: true, message: 'Son Youtube retiré !' }
+  }).catch((err) => {
+    ctx.session.alert = { success: false, message: err.message ?? err }
+    console.error(err)
+  })
+  
   ctx.redirect('/audios')
 })
 
 router.get('/', async ctx => {
-  await ctx.render('audios', { alert: ctx.session.alert })
+  const data = await getYTData()
+  await ctx.render('audios', { data, alert: ctx.session.alert })
   ctx.session.alert = null
 })
 

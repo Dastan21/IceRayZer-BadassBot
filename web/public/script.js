@@ -16,3 +16,12 @@ Array.from(document.querySelectorAll('audio[data-volume-control]')).forEach($aud
     $audio.volume = val / 100
   }
 })
+
+const $alert = document.getElementById('alert')
+if ($alert != null) {
+  const delay = $alert.classList.contains('success') ? 3000 : 10000
+
+  setTimeout(() => {
+    $alert?.remove()
+  }, delay)
+}
