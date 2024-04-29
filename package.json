@@ -2,17 +2,9 @@
   "name": "badass",
   "version": "1.0.0",
   "scripts": {
-    "postinstall": "(cd bot && pnpm i); (cd web && pnpm i)",
     "start-bot": "cd bot && npm run start",
     "start-web": "cd web && npm run start"
   },
   "author": "Dastan21",
-  "license": "MIT",
-  "devDependencies": {
-    "eslint": "^8.57.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.1.1"
-  }
+  "license": "MIT"
 }
