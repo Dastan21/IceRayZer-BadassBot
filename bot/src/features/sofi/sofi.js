@@ -6,11 +6,12 @@ import Feature from '../../utils/feature.js'
 import voice from '../../utils/voice.js'
 
 const SOFI_AUDIOS_PATH = path.join(import.meta.dirname, '../../../audios/sofi')
+export const SOFI_KEYS = ['drop', 'grab']
 
 export default class Sofi extends Feature {
   constructor () {
     super({
-      sofi_keys: ['drop', 'grab']
+      sofi_audios: {}
     })
 
     this.processSofi = this.processSofi.bind(this)
@@ -25,7 +26,7 @@ export default class Sofi extends Feature {
   }
 
   async processSofi (msg) {
-    if (msg.channelId !== '1205893733569138799' || msg.author?.id !== '742070928111960155') return
+    if (msg.channelId !== process.env.SOFI_CHANNEL || msg.author?.id !== process.env.SOFI_ID) return
     if (msg.mentions.users.size !== 1) return
     if (voice.channelId == null) return
 
@@ -33,19 +34,19 @@ export default class Sofi extends Feature {
     const channel = await client.channels.fetch(voice.channelId)
     if (channel.members.find(m => m.user.id === userId) == null) return
 
-    const key = this.getSofiKey(msg.content)
-    if (key == null) return
+    const sofiKey = this.getSofiKey(msg.content)
+    if (sofiKey == null) return
 
     const files = await readdir(path.join(SOFI_AUDIOS_PATH, userId)).catch(() => {}) ?? []
-    const audios = files.filter(a => a.startsWith(key))
+    const audios = files.filter(a => a.startsWith(sofiKey))
     const audio = audios.length > 1 ? audios[randomInt(0, audios.length)] : audios[0]
     if (audio == null) return
 
-    voice.play(path.join(SOFI_AUDIOS_PATH, userId, audio), 1)
+    voice.play(path.join(SOFI_AUDIOS_PATH, userId, audio), this.data.sofi_audios[`${userId}/${sofiKey}/${audio.replace('.mp3', '')}`])
   }
 
   getSofiKey (content) {
-    for (const key of this.data.sofi_keys) {
+    for (const key of SOFI_KEYS) {
       if (content.toLowerCase().includes(key)) return key
     }
     return null

@@ -15,6 +15,8 @@ export default class Feature {
 
   constructor (defaultData) {
     this.#data = new LowSync(new JSONFileSync(path.join(FEATURES_PATH, this.id, 'data.json')), defaultData)
+    this.#data.read()
+    this.#data.write()
   }
 
   get data () {
@@ -81,5 +83,6 @@ export function unloadFeature (feat) {
 }
 
 export function isFeatureEnabled (feat) {
+  db.read()
   return db.data.features[feat]
 }

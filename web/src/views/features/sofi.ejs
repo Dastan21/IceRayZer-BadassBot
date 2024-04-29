@@ -1,0 +1,46 @@
+<div class="input-group">
+  <span>Sons personnalisés</span>
+  <div class="input-group">
+    <span>Ajouter un utilisateur</span>
+    <label class="input">
+      <input type="number" name="user_id" placeholder="ID utilisateur">
+    </label>
+    <% feature.data.sofi_keys.forEach(sofiKey=> { %>
+      <label class="input"><span>Ajouter un "<%= sofiKey %>"</span>
+        <input type="file" name="<%= sofiKey %>" accept="audio/mp3">
+      </label>
+    <% }) %>
+  </div>
+  <% Object.keys(feature.data.sofi_audios).forEach(userId => { %>
+    <div class="input-group">
+      <button type="button" data-hide><%= userId %></button>
+      <div class="input-group">
+        <% feature.data.sofi_keys.forEach(sofiKey => { %>
+          <% for (let i = -1; i < feature.data.sofi_audios[userId][sofiKey].length; i++) { %>
+            <div class="input">
+              <% if (feature.data.sofi_audios[userId][sofiKey][i] == null) { %>
+                <span>Ajouter un "<%= sofiKey %>"</span>
+                <input type="file" name="<%= userId %>/<%= sofiKey %>" accept="audio/mp3">
+              <% } else { %>
+                <span><%= feature.data.sofi_audios[userId][sofiKey][i].name %></span>
+                <audio controls autobuffer data-volume-control>
+                  <source src="data:audio/mp3;base64,<%= feature.data.sofi_audios[userId][sofiKey][i].href %>">
+                </audio>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="1"
+                  name="volume-<%= userId %>/<%= sofiKey %>/<%= feature.data.sofi_audios[userId][sofiKey][i].name %>"
+                  value="<%= feature.data.sofi_audios[userId][sofiKey][i].volume %>"
+                >
+                <input type="hidden" name="<%= userId %>/<%= sofiKey %>" value="<%= feature.data.sofi_audios[userId][sofiKey][i].name %>">
+                <button type="button" data-delete-input>Supprimer</button>
+              <% } %>
+            </div>
+          <% } %>
+        <% }) %>
+      </div>
+    </div>
+  <% }) %>
+</div>

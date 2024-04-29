@@ -1,0 +1,6 @@
+<% if (feature.data != null && Object.keys(feature.data).length > 0) { %>
+  <form action="/features/<%= feature.id %>/config" method="post" class="feature-configs" enctype="multipart/form-data">
+    <%- include(`features/${feature.id}`, { feature }) -%>
+    <button type="submit">Enregistrer</button>
+  </form>
+<% } %>

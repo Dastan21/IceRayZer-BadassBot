@@ -1,16 +1,32 @@
 <main>
-  <h2 class="features-title">Fonctionnalités</h2>
+  <h1 class="features-title">Fonctionnalités</h1>
   <div class="features">
     <% features.forEach(feature => { %>
-      <form action="features/<%= feature.id %>/save" method="post" class="feature">
+      <div class="feature card">
         <div class="feature-header">
-          <h3 class="feature-title"><%= feature.name %></h3>
-          <button type="button" onclick="toggleFeature('<%= feature.id %>', '<%= !feature.enabled %>')">
-            <%= feature.enabled ? 'Désactiver' : 'Activer' %>
-          </button>
+          <div class="feature-header-title">
+            <form action="/features/<%= feature.id %>/toggle" method="post" class="feature-enabled-icon" title="<%= feature.name %> <%= feature.enabled ? 'activé' : 'désactivé' %>">
+              <button class="button-icon" type="submit">
+                <% if (feature.enabled) { %>
+                  <svg width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" onclick="toggleFeature('<%= feature.id %>', false)">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 6H9a6 6 0 1 0 0 12h6a6 6 0 0 0 0-12Z" />
+                    <circle cx="15" cy="12" r="3" fill="currentColor" stroke="currentColor" stroke-width="2" />
+                  </svg>
+                <% } else { %>
+                  <svg width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" onclick="toggleFeature('<%= feature.id %>', true)">
+                    <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M12 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M3 12a6 6 0 0 0 6 6h6a6 6 0 0 0 0-12H9a6 6 0 0 0-6 6Z" />
+                  </svg>
+                <% } %>
+              </button>
+              <input type="checkbox" name="toggle" hidden <%= feature.enabled ? '' : 'checked' %>>
+            </form>
+            <h2 class="feature-title"><%= feature.name %></h2>
+          </div>
         </div>
         <p><%= feature.description %></p>
-      </form>
+        <%- include('config', { feature }) -%>
+      </div>
     <% }) %>
   </div>
 </main>

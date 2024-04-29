@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <% if (error) { %>
-      <div><%= error %></div>
-    <% } %>
     <%- body %>
+    <%- include('alert') %>
     <script src="script.js"></script>
   </body>
 </html>
