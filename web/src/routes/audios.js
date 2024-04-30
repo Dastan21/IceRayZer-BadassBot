@@ -1,6 +1,6 @@
 import multer from '@koa/multer'
 import Router from '@koa/router'
-import { playAudioYoutube as addAudioYoutube, getYTData, pauseAudioYoutube, playAudioFile, removeAudioYoutube, resumeAudioYoutube } from '../controllers/audios.js'
+import { addFilePlaylist, addYoutubePlaylist, getPlaylistData, pausePlaylist, removePlaylist, resumePlaylist } from '../controllers/audios.js'
 
 const upload = multer({
   storage: multer.memoryStorage()
@@ -19,8 +19,8 @@ router.use((ctx, next) => {
 })
 
 router.post('/file', upload.any(), async ctx => {
-  await playAudioFile(ctx.files?.[0]).then(() => {
-    ctx.session.alert = { success: true, message: 'Son joué !' }
+  await addFilePlaylist(ctx.files?.[0]).then(() => {
+    ctx.session.alert = { success: true, message: 'Son ajouté à la playlist !' }
   }).catch((err) => {
     ctx.session.alert = { success: false, message: err.message ?? err }
     console.error(err)
@@ -29,9 +29,9 @@ router.post('/file', upload.any(), async ctx => {
   ctx.redirect('/audios')
 })
 
-router.post('/youtube/add', async ctx => {
-  await addAudioYoutube(ctx.request.body.yt).then(() => {
-    ctx.session.alert = { success: true, message: 'Son Youtube mis en pause !' }
+router.post('/youtube', async ctx => {
+  await addYoutubePlaylist(ctx.request.body.yt).then(() => {
+    ctx.session.alert = { success: true, message: 'Son Youtube ajouté à la playlist !' }
   }).catch((err) => {
     ctx.session.alert = { success: false, message: err.message ?? err }
     console.error(err)
@@ -40,9 +40,9 @@ router.post('/youtube/add', async ctx => {
   ctx.redirect('/audios')
 })
 
-router.post('/youtube/pause', async ctx => {
-  await pauseAudioYoutube().then(() => {
-    ctx.session.alert = { success: true, message: 'Son Youtube mis en pause !' }
+router.post('/playlist/pause', async ctx => {
+  await pausePlaylist().then(() => {
+    ctx.session.alert = { success: true, message: 'Playlist mise en pause !' }
   }).catch((err) => {
     ctx.session.alert = { success: false, message: err.message ?? err }
     console.error(err)
@@ -51,9 +51,9 @@ router.post('/youtube/pause', async ctx => {
   ctx.redirect('/audios')
 })
 
-router.post('/youtube/resume', async ctx => {
-  await resumeAudioYoutube().then(() => {
-    ctx.session.alert = { success: true, message: 'Son Youtube en cours de lecture !' }
+router.post('/playlist/resume', async ctx => {
+  await resumePlaylist().then(() => {
+    ctx.session.alert = { success: true, message: 'Playlist en cours de lecture !' }
   }).catch((err) => {
     ctx.session.alert = { success: false, message: err.message ?? err }
     console.error(err)
@@ -62,9 +62,9 @@ router.post('/youtube/resume', async ctx => {
   ctx.redirect('/audios')
 })
 
-router.post('/youtube/:id/remove', async ctx => {
-  await removeAudioYoutube(ctx.params.id).then(() => {
-    ctx.session.alert = { success: true, message: 'Son Youtube retiré !' }
+router.post('/playlist/:id/remove', async ctx => {
+  await removePlaylist(ctx.params.id).then(() => {
+    ctx.session.alert = { success: true, message: 'Son retiré de la playlist !' }
   }).catch((err) => {
     ctx.session.alert = { success: false, message: err.message ?? err }
     console.error(err)
@@ -74,8 +74,8 @@ router.post('/youtube/:id/remove', async ctx => {
 })
 
 router.get('/', async ctx => {
-  const data = await getYTData()
-  await ctx.render('audios', { data, alert: ctx.session.alert })
+  const playlist = await getPlaylistData()
+  await ctx.render('audios', { playlist, alert: ctx.session.alert })
   ctx.session.alert = null
 })
 

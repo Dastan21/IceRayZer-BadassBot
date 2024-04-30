@@ -1,38 +1,35 @@
-import { Readable } from 'node:stream'
-import voice from '../../../bot/src/utils/voice.js'
-import YTPlayer from '../models/ytplayer.js'
+import Playlist from '../models/playlist.js'
 
-const ytplayer = new YTPlayer()
+const playlist = new Playlist()
 
-export async function playAudioFile (file) {
+export async function addFilePlaylist (file) {
   if (file == null) throw new Error('Audio requis')
   
-  voice.play(Readable.from(file.buffer))
+  await playlist.add(file)
 }
 
-export async function getYTData () {
+export async function getPlaylistData () {
   return {
-    audios: ytplayer.queue,
-    playing: voice.playing
+    audios: playlist.queue
   }
 }
 
-export async function playAudioYoutube (url) {
+export async function addYoutubePlaylist (url) {
   if (url == null) throw new Error('URL non renseignée')
 
-  await ytplayer.add(url)
+  await playlist.add(url)
 }
 
-export async function pauseAudioYoutube () {
-  ytplayer.pause()
+export async function pausePlaylist () {
+  playlist.pause()
 }
 
-export async function resumeAudioYoutube () {
-  ytplayer.resume()
+export async function resumePlaylist () {
+  playlist.resume()
 }
 
 
-export async function removeAudioYoutube (id) {
-  ytplayer.remove(id)
+export async function removePlaylist (id) {
+  playlist.remove(id)
 }
 

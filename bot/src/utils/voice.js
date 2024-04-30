@@ -39,6 +39,10 @@ class Voice {
   get playing () {
     return this.player.state.status === AudioPlayerStatus.Playing
   }
+
+  get paused () {
+    return this.player.state.status === AudioPlayerStatus.Paused
+  }
 }
 
 export default new Voice()

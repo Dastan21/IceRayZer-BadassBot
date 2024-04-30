@@ -205,24 +205,28 @@ input[type="range"] {
   padding: 0;
 }
 
-.yt-audios {
+.audios {
+  padding: 32px;
+}
+
+.playlist-audios {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: 16px;
 }
 
-.yt-audio {
+.playlist-audio {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.yt-audio button {
+.playlist-audio button {
   margin: 0;
 }
 
-.yt-actions {
+.playlist-actions {
   display: flex;
   gap: 4px;
 }

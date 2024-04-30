@@ -2,8 +2,8 @@
   "name": "badass",
   "version": "1.0.0",
   "scripts": {
-    "start-bot": "cd bot && npm run start",
-    "start-web": "cd web && npm run start"
+    "start": "cd web && npm run start",
+    "install": "pnpm install --filter badass-*"
   },
   "author": "Dastan21",
   "license": "MIT"
