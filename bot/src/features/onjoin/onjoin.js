@@ -3,6 +3,7 @@ import Feature from '../../utils/feature.js'
 import voice from '../../utils/voice.js'
 
 const ON_JOIN_AUDIOS_PATH = path.join(import.meta.dirname, '../../../audios/onjoin')
+const AUDIO_DELAY = 500
 
 export default class OnJoin extends Feature {
   constructor () {
@@ -24,6 +25,8 @@ export default class OnJoin extends Feature {
   async processOnJoin (_oldState, newState) {
     if (voice.channelId !== newState.channelId) return
 
-    voice.play(path.join(ON_JOIN_AUDIOS_PATH, `${newState.member.user.id}.mp3`))
+    setTimeout(() => {
+      voice.play(path.join(ON_JOIN_AUDIOS_PATH, `${newState.member.user.id}.mp3`))
+    }, AUDIO_DELAY)
   }
 }
