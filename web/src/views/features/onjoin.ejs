@@ -1,0 +1,35 @@
+<div class="input-group">
+  <span>Sons personnalisés</span>
+  <div class="input-group">
+    <span>Ajouter un utilisateur</span>
+    <label class="input">
+      <input type="number" name="user_id" placeholder="ID utilisateur" />
+    </label>
+    <label class="input"
+      ><span>Ajouter un son</span>
+      <input type="file" name="audio" accept="audio/mp3" />
+    </label>
+  </div>
+  <% feature.data.onjoin_audios.forEach(audio => { %>
+  <div class="input-group">
+    <button type="button" data-hide><%= audio.userId %></button>
+    <div class="input-group">
+      <div class="input">
+        <audio controls autobuffer data-volume-control>
+          <source src="data:audio/mp3;base64,<%= audio.href %>" />
+        </audio>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          name="volume-<%= audio.userId %>"
+          value="<%= audio.volume %>"
+        />
+        <input type="hidden" name="audios" value="<%= audio.userId %>" />
+        <button type="button" data-delete-input>Supprimer</button>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>
