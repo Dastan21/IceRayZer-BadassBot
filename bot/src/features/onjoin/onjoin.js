@@ -26,7 +26,8 @@ export default class OnJoin extends Feature {
     if (voice.channelId !== newState.channelId) return
 
     setTimeout(() => {
-      voice.play(path.join(ON_JOIN_AUDIOS_PATH, `${newState.member.user.id}.mp3`), this.data.sofi_audios[userId])
+      const userId = newState.member.user.id
+      voice.play(path.join(ON_JOIN_AUDIOS_PATH, `${userId}.mp3`), this.data.sofi_audios[userId])
     }, AUDIO_DELAY)
   }
 }
