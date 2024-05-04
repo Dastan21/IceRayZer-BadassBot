@@ -17,10 +17,10 @@ export async function saveConfig (req) {
     if (newUserAudios.length < 1) throw new Error('au moins un audio est requis')
     for (const file of newUserAudios) {
       if (config.sofi_audios[req.body.user_id] != null) throw new Error('ID déjà utilisé')
-      const otherFreqName = getAudioFileName(file.originalname)
-      if (!otherFreqName) throw new Error('nom de fichier audio invalide')
+      const fileName = getAudioFileName(file.originalname)
+      if (!fileName) throw new Error('nom de fichier audio invalide')
       if (file.size > AUDIO_MAX_SIZE) throw new Error('fichier audio trop lourd')
-      await saveAudio(req.body.user_id, file.fieldname + '_' + otherFreqName, file.buffer)
+      await saveAudio(req.body.user_id, file.fieldname + '_' + fileName, file.buffer)
     }
   }
 
