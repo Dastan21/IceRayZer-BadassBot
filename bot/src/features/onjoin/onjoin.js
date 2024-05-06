@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { client } from '../../bot.js'
 import Feature from '../../utils/feature.js'
 import voice from '../../utils/voice.js'
 
@@ -23,10 +24,10 @@ export default class OnJoin extends Feature {
   }
 
   async processOnJoin (_oldState, newState) {
-    if (voice.channelId !== newState.channelId) return
+    const userId = newState.member.user.id
+    if (_oldState.channelId === voice.channelId || newState.channelId !== voice.channelId || userId === client.user.id) return
 
     setTimeout(() => {
-      const userId = newState.member.user.id
       voice.play(path.join(ON_JOIN_AUDIOS_PATH, `${userId}.mp3`), this.data.onjoin_audios[userId])
     }, AUDIO_DELAY)
   }
