@@ -18,6 +18,9 @@ export async function saveConfig (req) {
     }
   }).filter(Boolean)
 
+  const prevData = await getFeatureData('badass')
+  await Promise.allSettled(prevData.others_freq.filter(o => !othersFreq.find(f => o.name === f.name)).map(o => unlink(path.join(AUDIOS_PATH, `${o.name}.mp3`))))
+
   const file = req.files.find(f => f.fieldname === 'audio')
   if (file != null || req.body['freq-'] !== '') {
     if (file == null) throw new Error('fichier audio manquant')
@@ -31,9 +34,6 @@ export async function saveConfig (req) {
     othersFreq.push({ name: otherFreqName, freq: Number(req.body['freq-']) })
     await saveAudio(otherFreqName, file.buffer)
   }
-
-  const prevData = await getFeatureData('badass')
-  await Promise.allSettled(prevData.others_freq.filter(o => !othersFreq.find(f => o.name === f.name)).map(o => unlink(path.join(AUDIOS_PATH, `${o.name}.mp3`))))
 
   const data = {
     badass_freq: Number(req.body.badass_freq),

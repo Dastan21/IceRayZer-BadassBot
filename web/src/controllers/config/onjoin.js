@@ -1,4 +1,4 @@
-import { mkdir, readFile, readdir, stat, unlink, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, readdir, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { getFeatureData, setFeatureData } from '../features.js'
 import { getAudioFileName } from './common.js'
@@ -8,6 +8,9 @@ const AUDIO_MAX_SIZE = 1000000
 
 export async function saveConfig (req) {
   const config = await loadConfig(getFeatureData('onjoin'))
+
+  const audiosToDelete = config.onjoin_audios.filter(a => req.body.audios !== a.userId && !(Array.isArray(req.body.audios) && req.body.audios.includes(a.userId))).map(a => path.join(ONJOIN_AUDIOS_PATH, `${a.userId}.mp3`))
+  await Promise.allSettled(audiosToDelete.map(unlink))
 
   const newAudio = req.files?.[0]
   if (req.body.user_id !== '' || newAudio != null) {
@@ -20,9 +23,6 @@ export async function saveConfig (req) {
     if (newAudio.size > AUDIO_MAX_SIZE) throw new Error('fichier audio trop lourd')
     await saveAudio(req.body.user_id, newAudio.buffer)
   }
-  
-  const audiosToDelete = config.onjoin_audios.filter(a => req.body.audios !== a.userId && !(Array.isArray(req.body.audios) && req.body.audios.includes(a.userId))).map(a => path.join(ONJOIN_AUDIOS_PATH, `${a.userId}.mp3`))
-  await Promise.allSettled(audiosToDelete.map(unlink))
 
   const data = {
     onjoin_audios: Object.keys(req.body).filter(k => k.startsWith('volume-')).reduce((t, a) => {
@@ -54,8 +54,5 @@ async function loadAudio (userId) {
 
 async function saveAudio (userId, data) {
   await mkdir(path.join(ONJOIN_AUDIOS_PATH), { recursive: true })
-  const audioPath = path.join(ONJOIN_AUDIOS_PATH, `${userId}.mp3`)
-  const audioStat = await stat(audioPath).catch(() => {})
-  if (audioStat != null) throw new Error('nom de fichier audio déjà utilisé')
-  return writeFile(audioPath, data)
+  return writeFile(path.join(ONJOIN_AUDIOS_PATH, `${userId}.mp3`), data)
 }
