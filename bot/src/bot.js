@@ -36,10 +36,11 @@ if (process.env.WEB_ONLY !== 'true') {
     }
   })
 
-  client.on('voiceStateUpdate', (olSdtate, newState) => {
-    if (olSdtate.channel == null || olSdtate.member.user.id === client.user.id) return
+  client.on('voiceStateUpdate', (oldState, newState) => {
+    if (oldState.channel == null || oldState.member.user.id === client.user.id) return
     if (voice.channelId !== newState.channelId) voice.speakers.delete(newState.member.user.id)
-    if (olSdtate.channel.members.filter((m) => !m.user.bot).size > 0) return
+    if (oldState.channelId === voice.channelId && oldState.channel?.members.filter((m) => !m.user.bot).size > 0) return
+    if (newState.channelId === voice.channelId && newState.channel?.members.filter((m) => !m.user.bot).size > 0) return
 
     voice.connection = getVoiceConnection(newState.guild.id)
     voice.disconnect()

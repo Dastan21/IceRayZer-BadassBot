@@ -1,0 +1,40 @@
+<main>
+  <h1 class="title">Audios</h1>
+  <div class="audios">
+    <div class="card">
+      <form action="/audios/file" method="post" enctype="multipart/form-data">
+        <input type="file" name="audio" accept="audio/*" />
+        <button type="submit">Ajouter</button>
+      </form>
+      <form action="/audios/youtube" method="post">
+        <input type="text" name="yt" placeholder="Lien Youtube" />
+        <button type="submit">Ajouter</button>
+      </form>
+
+      <% if (playlist.audios.length > 0) { %>
+      <div class="playlist-actions">
+        <form action="/audios/playlist/pause" method="post">
+          <button type="submit">Pause</button>
+        </form>
+        <form action="/audios/playlist/resume" method="post">
+          <button type="submit">Reprendre</button>
+        </form>
+      </div>
+      <div class="playlist-audios">
+        <% playlist.audios.forEach(audio => { %>
+        <div class="playlist-audio">
+          <h4 class="title">
+            <% if (audio.url) { %>
+            <a href="<%= audio.url %>" target="_blank"><%= audio.title %></a>
+            <% } else { %> <%= audio.title %> <% } %>
+          </h4>
+          <form action="/audios/playlist/<%= audio.id %>/remove" method="post">
+            <button type="submit">Retirer</button>
+          </form>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</main>

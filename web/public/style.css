@@ -16,7 +16,7 @@ main {
   padding: 32px;
 }
 
-.features-title {
+.title {
   margin: 0;
 }
 
@@ -29,21 +29,17 @@ main {
   justify-content: space-between;
 }
 
-.feature .feature-header .feature-header-title {
+.feature .feature-header .title {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.feature .feature-header .feature-header-title .feature-enabled-icon {
+.feature .feature-header .title .feature-enabled-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-}
-
-.feature .feature-title {
-  margin: 0;
 }
 
 .feature .feature-toggle {
@@ -112,7 +108,7 @@ button[type="submit"] {
   gap: 16px;
 }
 
-.login .login-title {
+.login .title {
   margin: 0 auto 32px auto;
 }
 
@@ -207,4 +203,51 @@ input[type="file"] {
 input[type="range"] {
   max-width: 100px;
   padding: 0;
+}
+
+.audios {
+  padding: 32px;
+}
+
+.playlist-audios {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.playlist-audio {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.playlist-audio button {
+  margin: 0;
+}
+
+.playlist-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.user-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: start;
+}
+
+.user-buttons .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  width: 31px;
+  height: 31px;
+}
+
+.user-buttons .icon svg {
+  width: 25px;
+  height: 25px;
 }

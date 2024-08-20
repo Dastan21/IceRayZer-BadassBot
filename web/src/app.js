@@ -12,7 +12,9 @@ import routes from './routes/index.js'
 const app = new Koa()
 app.keys = [process.env.SESSION_SECRET]
 app.use(bodyParser())
-app.use(session({}, app))
+app.use(session({
+  maxAge: 1000 * 60 * 60 * 24 * 7 // a week
+}, app))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(serve(path.join(import.meta.dirname, '..', 'public')))

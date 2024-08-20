@@ -26,7 +26,7 @@ export default class Sofi extends Feature {
   }
 
   async processSofi (msg) {
-    if (msg.channelId !== process.env.SOFI_CHANNEL || msg.author?.id !== process.env.SOFI_ID) return
+    if (msg.channelId !== process.env.SOFI_CHANNEL || msg.author?.id !== process.env.HIDEAKI_ID) return
     if (msg.mentions.users.size !== 1) return
     if (voice.channelId == null) return
 

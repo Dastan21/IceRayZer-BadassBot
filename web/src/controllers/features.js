@@ -28,8 +28,8 @@ export async function toggleFeature (feat, value) {
 }
 
 export async function updateFeatureConfig (feat, req) {
-  const featMod = await import(`./config/${feat}.js`)
-  await featMod.saveConfig(req)
+  const featMod = await import(`./config/${feat}.js`).catch(() => {})
+  await featMod?.saveConfig(req)
 }
 
 export async function getFeatureMeta (feat) {
@@ -38,8 +38,8 @@ export async function getFeatureMeta (feat) {
 
 export async function getFeatureData (feat) {
   const data = JSON.parse(await readFile(path.join(FEATURES_PATH, feat, 'data.json'), { encoding: 'utf-8' }).catch(() => '{}'))
-  const featMod = await import(`./config/${feat}.js`)
-  return await featMod.loadConfig(data)
+  const featMod = await import(`./config/${feat}.js`).catch(() => {})
+  return await featMod?.loadConfig(data) ?? {}
 }
 
 export async function setFeatureData (feat, data) {

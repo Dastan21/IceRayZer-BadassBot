@@ -22,7 +22,7 @@ router.post('/:feat/toggle', async ctx => {
   await toggleFeature(ctx.params.feat, ctx.request.body.toggle).then(() => {
     ctx.session.alert = { success: true, message: `Fonctionnalité ${ctx.request.body.toggle ? 'activée' : 'désactivée'} !` }
   }).catch((err) => {
-    ctx.session.alert = { success: false, message: `Une erreur est survenue : ${err.message ?? err}` }
+    ctx.session.alert = { success: false, message: err.message ?? err }
     console.error(err)
   })
   ctx.redirect('/features')
@@ -32,7 +32,7 @@ router.post('/:feat/config', upload.any(), async ctx => {
   await updateFeatureConfig(ctx.params.feat, ctx.request).then(() => {
     ctx.session.alert = { success: true, message: 'Configurations sauvegardées !' }
   }).catch((err) => {
-    ctx.session.alert = { success: false, message: `Une erreur est survenue : ${err.message ?? err}` }
+    ctx.session.alert = { success: false, message: err.message ?? err }
     console.error(err)
   })
   ctx.redirect('/features')

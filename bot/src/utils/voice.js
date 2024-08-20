@@ -1,4 +1,4 @@
-import { VoiceConnectionStatus, createAudioPlayer, createAudioResource, entersState } from '@discordjs/voice'
+import { AudioPlayerStatus, NoSubscriberBehavior, VoiceConnectionStatus, createAudioPlayer, createAudioResource, entersState } from '@discordjs/voice'
 import { features } from './feature.js'
 
 const VOICE_CONNECTION_TIMEOUT = 1000
@@ -7,7 +7,6 @@ class Voice {
   channelId = null
   player = createAudioPlayer()
   speakers = new Map()
-  playing = false
   connection = null
 
   constructor () {
@@ -34,7 +33,15 @@ class Voice {
 
     const resource = createAudioResource(audio ?? '', { inlineVolume: true })
     resource.volume?.setVolume(Math.min(volume, 1) / 2)
-    this.player.play(resource)
+    this.player.play(resource, { behaviors: { noSubscriber: NoSubscriberBehavior.Play } })
+  }
+
+  get playing () {
+    return this.player.state.status === AudioPlayerStatus.Playing
+  }
+
+  get paused () {
+    return this.player.state.status === AudioPlayerStatus.Paused
   }
 }
 

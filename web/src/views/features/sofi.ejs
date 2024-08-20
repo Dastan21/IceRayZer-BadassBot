@@ -3,44 +3,76 @@
   <div class="input-group">
     <span>Ajouter un utilisateur</span>
     <label class="input">
-      <input type="number" name="user_id" placeholder="ID utilisateur">
+      <input type="number" name="user_id" placeholder="ID utilisateur" />
     </label>
     <% feature.data.sofi_keys.forEach(sofiKey=> { %>
-      <label class="input"><span>Ajouter un "<%= sofiKey %>"</span>
-        <input type="file" name="<%= sofiKey %>" accept="audio/mp3">
-      </label>
+    <label class="input"
+      ><span>Ajouter un "<%= sofiKey %>"</span>
+      <input type="file" name="<%= sofiKey %>" accept="audio/mp3" />
+    </label>
     <% }) %>
   </div>
   <% Object.keys(feature.data.sofi_audios).forEach(userId => { %>
-    <div class="input-group">
+  <div class="input-group">
+    <div class="user-buttons">
       <button type="button" data-hide><%= userId %></button>
-      <div class="input-group">
-        <% feature.data.sofi_keys.forEach(sofiKey => { %>
-          <% for (let i = -1; i < feature.data.sofi_audios[userId][sofiKey].length; i++) { %>
-            <div class="input">
-              <% if (feature.data.sofi_audios[userId][sofiKey][i] == null) { %>
-                <span>Ajouter un "<%= sofiKey %>"</span>
-                <input type="file" name="<%= userId %>/<%= sofiKey %>" accept="audio/mp3">
-              <% } else { %>
-                <span><%= feature.data.sofi_audios[userId][sofiKey][i].name %></span>
-                <audio controls autobuffer data-volume-control>
-                  <source src="data:audio/mp3;base64,<%= feature.data.sofi_audios[userId][sofiKey][i].href %>">
-                </audio>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  step="1"
-                  name="volume-<%= userId %>/<%= sofiKey %>/<%= feature.data.sofi_audios[userId][sofiKey][i].name %>"
-                  value="<%= feature.data.sofi_audios[userId][sofiKey][i].volume %>"
-                >
-                <input type="hidden" name="<%= userId %>/<%= sofiKey %>" value="<%= feature.data.sofi_audios[userId][sofiKey][i].name %>">
-                <button type="button" data-delete-input>Supprimer</button>
-              <% } %>
-            </div>
-          <% } %>
-        <% }) %>
-      </div>
+      <button
+        type="button"
+        data-copy="<%= userId %>"
+        class="icon"
+        title="Copier l'ID"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9 15H5C3.89543 15 3 14.1046 3 13V5C3 3.89543 3.89543 3 5 3H13C14.1046 3 15 3.89543 15 5V9M11 21H19C20.1046 21 21 20.1046 21 19V11C21 9.89543 20.1046 9 19 9H11C9.89543 9 9 9.89543 9 11V19C9 20.1046 9.89543 21 11 21Z"
+          />
+        </svg>
+      </button>
     </div>
+    <div class="input-group">
+      <% feature.data.sofi_keys.forEach(sofiKey => { %> <% for (let i = -1; i <
+      feature.data.sofi_audios[userId][sofiKey].length; i++) { %>
+      <div class="input">
+        <% if (feature.data.sofi_audios[userId][sofiKey][i] == null) { %>
+        <span>Ajouter un "<%= sofiKey %>"</span>
+        <input
+          type="file"
+          name="<%= userId %>/<%= sofiKey %>"
+          accept="audio/mp3"
+        />
+        <% } else { %>
+        <span><%= feature.data.sofi_audios[userId][sofiKey][i].name %></span>
+        <audio controls autobuffer data-volume-control>
+          <source
+            src="data:audio/mp3;base64,<%= feature.data.sofi_audios[userId][sofiKey][i].href %>"
+          />
+        </audio>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          name="volume-<%= userId %>/<%= sofiKey %>/<%= feature.data.sofi_audios[userId][sofiKey][i].name %>"
+          value="<%= feature.data.sofi_audios[userId][sofiKey][i].volume %>"
+        />
+        <input
+          type="hidden"
+          name="<%= userId %>/<%= sofiKey %>"
+          value="<%= feature.data.sofi_audios[userId][sofiKey][i].name %>"
+        />
+        <button type="button" data-delete-input>Supprimer</button>
+        <% } %>
+      </div>
+      <% } %> <% }) %>
+    </div>
+  </div>
   <% }) %>
 </div>

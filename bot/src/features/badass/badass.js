@@ -32,7 +32,7 @@ export default class Badass extends Feature {
     }
 
     speaker.stream?.destroy()
-    speaker.stream = voice.connection.receiver.subscribe(userId, {
+    speaker.stream = voice.connection?.receiver.subscribe(userId, {
       end: {
         behavior: EndBehaviorType.AfterSilence,
         duration: 1000
