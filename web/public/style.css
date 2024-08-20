@@ -12,6 +12,7 @@ main {
 
 .features {
   display: flex;
+  flex-wrap: wrap;
   gap: 32px;
   padding: 32px;
 }

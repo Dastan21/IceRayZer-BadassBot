@@ -6,7 +6,7 @@ const AUDIO_PATH = path.join(import.meta.dirname, '../../../audios/sofiminigame.
 
 export default class SofiMinigame extends Feature {
   constructor () {
-    super({})
+    super()
 
     this.processSofiMinigame = this.processSofiMiniGame.bind(this)
   }

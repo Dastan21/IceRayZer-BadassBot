@@ -14,17 +14,23 @@ export default class Feature {
   #data = null
 
   constructor (defaultData) {
-    this.#data = new LowSync(new JSONFileSync(path.join(FEATURES_PATH, this.id, 'data.json')), defaultData)
-    this.#data.read()
-    this.#data.write()
+    if (defaultData != null) {
+      this.#data = new LowSync(new JSONFileSync(path.join(FEATURES_PATH, this.id, 'data.json')), defaultData)
+      this.#data.read()
+      this.#data.write()
+    }
   }
 
   get data () {
+    if (this.#data == null) return null
+
     this.#data.read()
     return this.#data.data
   }
 
   set data (value) {
+    if (this.#data == null) return
+
     this.#data.data = value
     this.#data.write()
   }

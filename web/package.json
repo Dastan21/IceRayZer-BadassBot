@@ -6,7 +6,7 @@
     "dev": "set WEB_ONLY=true&& nodemon --env-file ../bot/.env src/app.js"
   },
   "dependencies": {
-    "@distube/ytdl-core": "^4.13.3",
+    "@distube/ytdl-core": "^4.14.4",
     "@koa/bodyparser": "^5.1.1",
     "@koa/ejs": "^5.1.0",
     "@koa/multer": "^3.0.2",
@@ -20,6 +20,6 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.4"
   }
 }
