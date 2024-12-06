@@ -39,14 +39,14 @@ export default class Badass extends Feature {
       }
     })
 
-    speaker.stream.on('data', (_data) => {
+    speaker.stream?.on('data', (_data) => {
       if (speaker == null) return
 
       speaker.value = true
       speaker.margin++
     })
 
-    speaker.stream.on('close', () => {
+    speaker.stream?.on('close', () => {
       if (speaker == null) return
 
       speaker.value = false
