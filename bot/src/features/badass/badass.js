@@ -3,7 +3,7 @@ import path from 'node:path'
 import Feature from '../../utils/feature.js'
 import voice from '../../utils/voice.js'
 
-const ERROR_MARGIN = 40
+const ERROR_MARGIN = 50
 
 const AUDIOS_PATH = path.join(import.meta.dirname, '../../../audios')
 const AUDIO_BADASS = 'badass'
