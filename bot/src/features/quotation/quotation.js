@@ -3,6 +3,8 @@ import { Client } from 'discord.js'
 import cron from 'node-cron'
 import Feature from '../../utils/feature.js'
 
+const QUOTATION_CHANNEL = process.env.QUOTATION_CHANNEL
+
 export default class Badass extends Feature {
   /** @type {Client<boolean>} client */
   #client = null
@@ -25,8 +27,8 @@ export default class Badass extends Feature {
   }
   
   async sendQuotation () {
-    this.#client?.channels.fetch('1195140050275553330').then(async (channel) => {
-      const thread = await channel.threads.fetch('1275421842156556344')
+    this.#client?.channels.fetch().then(async (channel) => {
+      const thread = await channel.threads.fetch(QUOTATION_CHANNEL)
       thread.send(await this.getQuotation())
     }).catch((err) => {
       console.error(err)
