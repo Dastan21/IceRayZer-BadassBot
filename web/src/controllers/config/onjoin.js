@@ -2,9 +2,11 @@ import { mkdir, readFile, readdir, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { getFeatureData, setFeatureData } from '../features.js'
 import { getAudioFileName } from './common.js'
+import { client } from '../../../../bot/src/bot.js'
 
 const ONJOIN_AUDIOS_PATH = path.join(import.meta.dirname, '../../../../bot/audios/onjoin')
 const AUDIO_MAX_SIZE = 1000000
+const SERVER_ID = process.env.SERVER_ID
 
 export async function saveConfig (req) {
   const config = await loadConfig(getFeatureData('onjoin'))
@@ -36,11 +38,14 @@ export async function saveConfig (req) {
 
 export async function loadConfig (data) {
   const audios = await readdir(ONJOIN_AUDIOS_PATH).catch(() => [])
+  const guild = await client.guilds.fetch(SERVER_ID).catch(() => {})
   return {
     onjoin_audios: await Promise.all(audios.map(async a => {
       const userId = a.replace('.mp3', '')
+      const user = await guild?.members.fetch(userId).catch(() => {})
       return {
         userId,
+        username: user?.displayName ?? userId,
         href: Buffer.from(await loadAudio(userId)).toString('base64'),
         volume: (data.onjoin_audios?.[userId] ?? 1) * 100
       }

@@ -3,9 +3,11 @@ import path from 'node:path'
 import { SOFI_KEYS } from '../../../../bot/src/features/sofi/sofi.js'
 import { getFeatureData, setFeatureData } from '../features.js'
 import { getAudioFileName } from './common.js'
+import { client } from '../../../../bot/src/bot.js'
 
 const SOFI_AUDIOS_PATH = path.join(import.meta.dirname, '../../../../bot/audios/sofi')
 const AUDIO_MAX_SIZE = 1000000
+const SERVER_ID = process.env.SERVER_ID
 
 export async function saveConfig (req) {
   const config = await loadConfig(getFeatureData('sofi'))
@@ -69,9 +71,13 @@ export async function loadConfig (data) {
 
   if (data.sofi_audios == null) data.sofi_audios = {}
 
+  const guild = await client.guilds.fetch(SERVER_ID).catch(() => {})
   const userIds = await readdir(SOFI_AUDIOS_PATH)
   for (const userId of userIds) {
-    config.sofi_audios[userId] = {}
+    const user = await guild?.members.fetch(userId).catch(() => {})
+    config.sofi_audios[userId] = {
+      username: user?.displayName ?? userId
+    }
     for (const sofiKey of SOFI_KEYS) {
       const userAudios = await readdir(path.join(SOFI_AUDIOS_PATH, userId)).catch(() => [])
       config.sofi_audios[userId][sofiKey] = await Promise.all(userAudios.filter(a => a.startsWith(sofiKey)).map(async a => {
