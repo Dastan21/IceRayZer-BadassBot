@@ -21,6 +21,10 @@ class Voice {
     this.connection.receiver.speaking.on('start', (userId) => {
       Object.values(features).forEach(f => f.startSpeak(userId))
     })
+
+    this.connection.receiver.speaking.on('end', (userId) => {
+      Object.values(features).forEach(f => f.endSpeak(userId))
+    })
   }
 
   disconnect () {

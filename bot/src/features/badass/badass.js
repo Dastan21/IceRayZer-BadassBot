@@ -1,13 +1,13 @@
-import { EndBehaviorType } from '@discordjs/voice'
 import path from 'node:path'
 import Feature from '../../utils/feature.js'
 import voice from '../../utils/voice.js'
-
-const ERROR_MARGIN = 50
+import { EndBehaviorType } from '@discordjs/voice'
 
 const AUDIOS_PATH = path.join(import.meta.dirname, '../../../audios')
 const AUDIO_BADASS = 'badass'
 const AUDIO_DURATION = 5000
+const MIN_SPEAK = 1000
+const ERROR_MARGIN = 50
 
 export default class Badass extends Feature {
   ready = true
@@ -23,8 +23,8 @@ export default class Badass extends Feature {
     let speaker = voice.speakers.get(userId)
     if (speaker == null) {
       speaker = {
-        stream: null,
         value: true,
+        time: Date.now(),
         margin: 0,
         userId
       }
@@ -39,20 +39,24 @@ export default class Badass extends Feature {
       }
     })
 
-    speaker.stream?.on('data', (_data) => {
+    speaker.stream.on('data', (_data) => {
       if (speaker == null) return
 
+      if (!speaker.value) speaker.time = Date.now()
       speaker.value = true
       speaker.margin++
     })
+  }
 
-    speaker.stream?.on('close', () => {
-      if (speaker == null) return
+  endSpeak (userId) {
+    const speaker = voice.speakers.get(userId)
+    if (speaker == null) return
 
-      speaker.value = false
-      if (speaker.margin >= ERROR_MARGIN) this.playBadass()
-      speaker.margin = 0
-    })
+    speaker.value = false
+    if (Date.now() - speaker.time > MIN_SPEAK && speaker.margin > ERROR_MARGIN) {
+      this.playBadass()
+    }
+    speaker.margin = 0
   }
 
   playBadass () {

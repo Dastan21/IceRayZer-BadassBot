@@ -1,5 +1,5 @@
 import { joinVoiceChannel } from '@discordjs/voice'
-import { GuildMember } from 'discord.js'
+import { GuildMember, MessageFlags } from 'discord.js'
 import path from 'node:path'
 import * as console from './utils/logger.js'
 import voice from './utils/voice.js'
@@ -14,7 +14,7 @@ async function join (interaction, connection) {
     channel = interaction.member.voice.channel
     if (connection != null) {
       if (connection.joinConfig.channelId === channel.id) {
-        await interaction.reply({ content: 'Badass est déjà dans le salon.', ephemeral: true })
+        await interaction.reply({ content: 'Badass est déjà dans le salon.', flags: MessageFlags.Ephemeral })
         return
       } else {
         connection.destroy()
@@ -29,7 +29,7 @@ async function join (interaction, connection) {
     })
     voice.channelId = channel.id
   } else {
-    await interaction.reply({ content: 'Vous devez d\'abord être dans un salon vocal.', ephemeral: true })
+    await interaction.reply({ content: 'Vous devez d\'abord être dans un salon vocal.', flags: MessageFlags.Ephemeral })
     return
   }
 
@@ -38,19 +38,19 @@ async function join (interaction, connection) {
   } catch (err) {
     console.error(err)
     connection.destroy()
-    await interaction.reply({ content: 'Impossible de rejoindre le salon vocal. Vérifier que Badass y a accès.', ephemeral: true })
+    await interaction.reply({ content: 'Impossible de rejoindre le salon vocal. Vérifier que Badass y a accès.', flags: MessageFlags.Ephemeral })
   }
 
-  await interaction.reply({ content: 'Badass a rejoint le salon vocal.', ephemeral: true })
+  await interaction.reply({ content: 'Badass a rejoint le salon vocal.', flags: MessageFlags.Ephemeral })
 }
 
 async function leave (interaction, connection) {
   if (connection == null) {
-    await interaction.reply({ content: 'Badass n\'est pas connecté au salon vocal.', ephemeral: true })
+    await interaction.reply({ content: 'Badass n\'est pas connecté au salon vocal.', flags: MessageFlags.Ephemeral })
     return
   }
 
-  await interaction.deferReply({ ephemeral: true })
+  await interaction.deferReply({ flags: MessageFlags.Ephemeral })
   try {
     voice.play(path.join(AUDIOS_PATH, AUDIO_LEAVE))
     setTimeout(() => {

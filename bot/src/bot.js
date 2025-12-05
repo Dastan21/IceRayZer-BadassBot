@@ -14,7 +14,7 @@ export const client = new Client({
 })
 
 if (process.env.WEB_ONLY !== 'true') {
-  client.on('ready', () => {
+  client.on('clientReady', () => {
     console.info(`${client.user?.tag} connecté !`)
     client.user?.setPresence({ status: 'invisible' })
 
