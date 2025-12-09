@@ -39,7 +39,7 @@ export default class Badass extends Feature {
       }
     })
 
-    speaker.stream.on('data', (_data) => {
+    speaker.stream?.on('data', (_data) => {
       if (speaker == null) return
 
       if (!speaker.value) speaker.time = Date.now()
