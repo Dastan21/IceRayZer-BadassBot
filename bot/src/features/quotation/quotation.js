@@ -1,12 +1,12 @@
 import * as cheerio from 'cheerio'
-import { Client } from 'discord.js'
 import cron from 'node-cron'
 import Feature from '../../utils/feature.js'
 
 const QUOTATION_CHANNEL = process.env.QUOTATION_CHANNEL
+const QUOTATION_THREAD = process.env.QUOTATION_THREAD
 
 export default class Badass extends Feature {
-  /** @type {Client<boolean>} client */
+  /** @type {import('discord.js').Client<boolean>} client */
   #client = null
 
   constructor () {
@@ -27,8 +27,8 @@ export default class Badass extends Feature {
   }
   
   async sendQuotation () {
-    this.#client?.channels.fetch().then(async (channel) => {
-      const thread = await channel.threads.fetch(QUOTATION_CHANNEL)
+    this.#client?.channels.fetch(QUOTATION_CHANNEL).then(async (channel) => {
+      const thread = await channel.threads.fetch(QUOTATION_THREAD)
       thread.send(await this.getQuotation())
     }).catch((err) => {
       console.error(err)
