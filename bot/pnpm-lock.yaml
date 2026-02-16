@@ -168,24 +168,28 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@snazzah/davey-linux-arm64-musl@0.1.8':
     resolution: {integrity: sha512-OhEwQmZ/ntiqHoSAxRe1qVfELdKMREqwlf52vhPMFVa4XNyT6jNYXGanTMjYX2+jhH9SlJ7cqsADm1VFvjRnGA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@snazzah/davey-linux-x64-gnu@0.1.8':
     resolution: {integrity: sha512-yghgG7iXZUHy734Cq3PcgrbRnLhhB233JNTX5VPRxRqdwFAg2MzAJ2iSWpP12K6hSqKq9hw0sdt8CNpr0mEXjQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@snazzah/davey-linux-x64-musl@0.1.8':
     resolution: {integrity: sha512-WwCiAge27ZOEu7NRx5NFjpCAkGcUGHGtoROBY4ElRYE0Tp3DfuzWU06qSu6JBQPlzhTTBN29X2/kGP8iRUwqnQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@snazzah/davey-wasm32-wasi@0.1.8':
     resolution: {integrity: sha512-VAUY6eMhiS4HkHDh0SCjVbwf2SUR/cHs0IzS02p4lYwuUaqPFQnraxMNZ6R2MNOK8NmtPbCpWvi7kYMxMJuL2A==}

@@ -1,0 +1,4 @@
+onlyBuiltDependencies:
+  - '@discordjs/opus'
+  - ffmpeg-static
+  - node-crc
