@@ -1,7 +1,7 @@
-import { EndBehaviorType } from '@discordjs/voice'
 import path from 'node:path'
 import Feature from '../../utils/feature.js'
 import voice from '../../utils/voice.js'
+import { EndBehaviorType } from '@discordjs/voice'
 
 const AUDIOS_PATH = path.join(import.meta.dirname, '../../../audios')
 const AUDIO_BADASS = 'badass'
@@ -68,14 +68,10 @@ export default class Badass extends Feature {
 
     let audio = AUDIO_BADASS
     // Pick audio file randomly (by freq)
-    const totalWeight = this.data.others_freq.reduce((sum, af) => sum + af.freq * 100, 0)
-    rand = Math.random() * totalWeight
-    let cumulative = 0;
-
+    rand = Math.random()
     const audioFreqs = this.data.others_freq.sort((a, b) => a.freq - b.freq)
     for (const af of audioFreqs) {
-      cumulative += af.freq;
-      if (rand < cumulative) {
+      if (rand < af.freq) {
         audio = af.name
         break
       }
