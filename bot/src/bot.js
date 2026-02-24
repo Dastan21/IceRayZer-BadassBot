@@ -41,7 +41,7 @@ if (process.env.WEB_ONLY !== 'true') {
     if (voice.channelId !== newState.channelId) voice.speakers.delete(newState.member.user.id)
     if (oldState.channelId === voice.channelId && oldState.channel?.members.filter((m) => !m.user.bot).size > 0) return
     if (newState.channelId === voice.channelId && newState.channel?.members.filter((m) => !m.user.bot).size > 0) return
-    if (oldState.channelId !== voice.channelId && newState.channelId == null) return
+    if (oldState.channelId !== voice.channelId || newState.channelId == null) return
 
     voice.connection = getVoiceConnection(newState.guild.id)
     voice.disconnect()
