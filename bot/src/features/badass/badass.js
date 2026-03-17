@@ -66,10 +66,11 @@ export default class Badass extends Feature {
     let rand = Math.random()
     if (rand > this.data.badass_freq) return
 
+    const audioFreqs = this.data.others_freq.sort((a, b) => a.freq - b.freq)
+    const audioFreqsTotal = audioFreqs.reduce((t, f) => t + f.freq, 0)
     let audio = AUDIO_BADASS
     // Pick audio file randomly (by freq)
-    rand = Math.random()
-    const audioFreqs = this.data.others_freq.sort((a, b) => a.freq - b.freq)
+    rand = Math.random() * audioFreqsTotal
     for (const af of audioFreqs) {
       if (rand < af.freq) {
         audio = af.name
